@@ -1,0 +1,234 @@
+import { db, sql } from "../src/db";
+import {
+  comments,
+  linkHealthChecks,
+  magicLinks,
+  moderationActions,
+  profiles,
+  projectClickEvents,
+  projectOwners,
+  projectPosts,
+  projectRankSnapshots,
+  projects,
+  projectSaves,
+  projectTags,
+  rateLimitEvents,
+  reports,
+  sessions,
+  tags,
+  viewImpressionCounters
+} from "../src/db/schema";
+import { defaultTagCatalog } from "../src/lib/constants";
+import { demoUserIds, seedProfiles, seedProjects } from "../src/lib/seed-data";
+
+async function main() {
+  await db.transaction(async (tx) => {
+    await tx.delete(viewImpressionCounters);
+    await tx.delete(rateLimitEvents);
+    await tx.delete(projectRankSnapshots);
+    await tx.delete(linkHealthChecks);
+    await tx.delete(moderationActions);
+    await tx.delete(reports);
+    await tx.delete(projectClickEvents);
+    await tx.delete(projectSaves);
+    await tx.delete(comments);
+    await tx.delete(projectTags);
+    await tx.delete(projectPosts);
+    await tx.delete(projectOwners);
+    await tx.delete(projects);
+    await tx.delete(tags);
+    await tx.delete(sessions);
+    await tx.delete(magicLinks);
+    await tx.delete(profiles);
+
+    await tx.insert(profiles).values(
+      seedProfiles.map((profile) => ({
+        id: profile.id,
+        email: profile.email,
+        displayName: profile.displayName,
+        githubUsername: profile.githubUsername,
+        role: profile.role
+      }))
+    );
+
+    const tagCatalog = [
+      ...defaultTagCatalog.map((tag, index) => ({
+        id: `00000000-0000-4000-8000-0000000008${String(index + 1).padStart(2, "0")}`,
+        slug: tag.slug,
+        name: tag.name
+      })),
+      { id: "00000000-0000-4000-8000-000000000891", slug: "productivity", name: "Productivity" },
+      { id: "00000000-0000-4000-8000-000000000892", slug: "creator", name: "Creator" },
+      { id: "00000000-0000-4000-8000-000000000893", slug: "health", name: "Health" },
+      { id: "00000000-0000-4000-8000-000000000894", slug: "education", name: "Education" }
+    ];
+
+    await tx.insert(tags).values(tagCatalog);
+
+    for (const project of seedProjects) {
+      await tx.insert(projects).values({
+        id: project.id,
+        slug: project.slug,
+        title: project.title,
+        tagline: project.tagline,
+        shortDescription: project.shortDescription,
+        overviewMd: project.overviewMd,
+        problemMd: project.problemMd,
+        targetUsersMd: project.targetUsersMd,
+        whyMadeMd: project.whyMadeMd,
+        stage: project.stage,
+        category: project.category,
+        platform: project.platform,
+        pricingModel: project.pricingModel,
+        pricingNote: project.pricingNote,
+        liveUrl: project.liveUrl,
+        liveUrlNormalized: project.liveUrl.toLowerCase(),
+        githubUrl: project.githubUrl,
+        githubUrlNormalized: project.githubUrl ? project.githubUrl.toLowerCase() : null,
+        demoUrl: project.demoUrl,
+        docsUrl: project.docsUrl,
+        makerAlias: project.makerAlias,
+        coverImageUrl: project.coverImageUrl,
+        galleryJson: project.gallery,
+        isOpenSource: project.isOpenSource,
+        noSignupRequired: project.noSignupRequired,
+        isSoloMaker: project.isSoloMaker,
+        aiToolsJson: project.aiTools,
+        verificationState: project.verificationState,
+        status: project.status,
+        featured: project.featured ?? false,
+        featuredOrder: project.featuredOrder ?? null,
+        publishedAt: project.status === "pending" ? null : project.publishedAt,
+        lastActivityAt: project.lastActivityAt
+      });
+
+      await tx.insert(projectOwners).values({
+        projectId: project.id,
+        userId: project.ownerUserId ?? null,
+        verificationMethod: project.ownerVerificationMethod,
+        isPrimary: true,
+        claimedAt: project.ownerUserId ? project.publishedAt : null
+      });
+
+      await tx.insert(projectPosts).values(
+        project.posts.map((post) => ({
+          id: post.id,
+          projectId: project.id,
+          type: post.type,
+          title: post.title,
+          summary: post.summary,
+          bodyMd: post.bodyMd,
+          requestedFeedbackMd: post.requestedFeedbackMd ?? null,
+          mediaJson: post.media,
+          status: post.status,
+          publishedAt: post.status === "published" ? post.publishedAt : null
+        }))
+      );
+
+      if (project.comments.length) {
+        await tx.insert(comments).values(
+          project.comments.map((comment) => ({
+            id: comment.id,
+            projectId: project.id,
+            postId: comment.postId ?? null,
+            parentId: comment.parentId ?? null,
+            userId: comment.userId,
+            bodyMd: comment.bodyMd,
+            status: comment.status ?? "active",
+            createdAt: comment.createdAt,
+            updatedAt: comment.createdAt
+          }))
+        );
+      }
+
+      await tx.insert(linkHealthChecks).values({
+        projectId: project.id,
+        status: project.linkHealth.status,
+        httpStatus: project.linkHealth.httpStatus ?? null,
+        failureCount: project.linkHealth.failureCount ?? 0,
+        note: project.linkHealth.note ?? null
+      });
+    }
+
+    const tagRows = await tx.select().from(tags);
+
+    for (const project of seedProjects) {
+      const projectTagValues = project.tags
+        .map((slug) => tagRows.find((tag) => tag.slug === slug))
+        .filter((tag): tag is typeof tagRows[number] => Boolean(tag))
+        .map((tag) => ({
+          projectId: project.id,
+          tagId: tag.id
+        }));
+
+      if (projectTagValues.length) {
+        await tx.insert(projectTags).values(projectTagValues);
+      }
+    }
+
+    await tx.insert(projectSaves).values([
+      { userId: demoUserIds.adminId, projectId: seedProjects[0].id },
+      { userId: demoUserIds.adminId, projectId: seedProjects[1].id },
+      { userId: demoUserIds.memberId, projectId: seedProjects[2].id }
+    ]);
+
+    await tx.insert(projectClickEvents).values(
+      seedProjects.slice(0, 6).flatMap((project, index) => [
+        {
+          projectId: project.id,
+          source: "home_try",
+          sessionHash: `seed-home-${index + 1}`
+        },
+        {
+          projectId: project.id,
+          source: "detail_try",
+          sessionHash: `seed-detail-${index + 1}`
+        }
+      ])
+    );
+
+    await tx.insert(projectRankSnapshots).values(
+      seedProjects.slice(0, 6).map((project, index) => ({
+        projectId: project.id,
+        finalScore: (60 - index * 4) * 100,
+        uniqueTryClicks7d: 16 - index,
+        newSaves30d: 4 + Math.max(0, 5 - index),
+        commentSignal30d: index < 2 ? 2 : 1,
+        freshnessMultiplier: 100,
+        qualityMultiplier: 100,
+        rankPosition: index + 1
+      }))
+    );
+
+    await tx.insert(reports).values({
+      id: "00000000-0000-4000-8000-000000000701",
+      reporterUserId: demoUserIds.adminId,
+      targetType: "project",
+      targetId: seedProjects[3].id,
+      reason: "broken-link",
+      note: "체험 링크 응답이 불안정합니다.",
+      status: "open"
+    });
+
+    await tx.insert(moderationActions).values({
+      id: "00000000-0000-4000-8000-000000000751",
+      adminUserId: demoUserIds.adminId,
+      targetType: "project",
+      targetId: seedProjects[5].id,
+      action: "archive",
+      reason: "장기간 미운영 프로젝트 정리",
+      metadataJson: {}
+    });
+  });
+
+  const profileCount = await db.$count(profiles);
+  const projectCount = await db.$count(projects);
+
+  console.log(`seed complete: profiles=${profileCount}, projects=${projectCount}`);
+  await sql.end();
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

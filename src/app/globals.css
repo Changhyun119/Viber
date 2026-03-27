@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f3ee;
+  --surface: #fffdf8;
+  --surface-muted: #f2ece3;
+  --foreground: #17202c;
+  --foreground-muted: #5b6472;
+  --line: rgba(23, 32, 44, 0.08);
+  --line-strong: rgba(23, 32, 44, 0.14);
+  --accent: #d76542;
+  --accent-strong: #bc5635;
+  --green: #2f6a61;
+  --violet: #606899;
+  --warning: #b45309;
+  --danger: #b42318;
+  --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-green: var(--green);
+  --color-violet: var(--violet);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --shadow-soft: var(--shadow-soft);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(215, 101, 66, 0.08), transparent 22rem),
+    linear-gradient(180deg, #faf8f4 0%, var(--background) 100%);
+  color: var(--foreground);
+  font-family:
+    "Pretendard Variable",
+    "Pretendard",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Segoe UI",
+    sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: rgba(215, 101, 66, 0.18);
+}
+
+.prose-block {
+  display: grid;
+  gap: 1rem;
+}
+
+.prose-block p,
+.prose-block ul,
+.prose-block ol,
+.prose-block blockquote,
+.prose-block pre {
+  margin: 0;
+}
+
+.prose-block ul,
+.prose-block ol {
+  display: grid;
+  gap: 0.5rem;
+  padding-left: 1.25rem;
+}
+
+.prose-block blockquote {
+  border-left: 3px solid rgba(23, 32, 44, 0.14);
+  padding-left: 1rem;
+  color: var(--foreground-muted);
+}
+
+.prose-block pre {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: rgba(23, 32, 44, 0.04);
+  padding: 1rem;
+}
+
+.prose-block code {
+  font-family:
+    "SFMono-Regular",
+    "SF Mono",
+    Consolas,
+    "Liberation Mono",
+    monospace;
+  font-size: 0.92em;
+}
+
+.prose-block :not(pre) > code {
+  border-radius: 0.5rem;
+  background: rgba(23, 32, 44, 0.06);
+  padding: 0.12rem 0.4rem;
+}
+
+.prose-block a {
+  color: var(--accent-strong);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.prose-block hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+}

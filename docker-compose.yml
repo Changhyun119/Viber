@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vibe-showcase-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: vibe_showcase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "54329:5432"
+    volumes:
+      - vibe_showcase_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d vibe_showcase"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  vibe_showcase_postgres:
