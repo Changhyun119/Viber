@@ -44,7 +44,7 @@ function ModerationButton({
 }
 
 export default async function AdminProjectsPage({ searchParams }: AdminProjectsPageProps) {
-  await requireAdminProfile();
+  await requireAdminProfile("/admin/projects");
   const params = await searchParams;
   const filters = {
     query: getValue(params.query),

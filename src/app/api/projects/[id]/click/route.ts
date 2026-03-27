@@ -65,7 +65,7 @@ export async function POST(request: Request, context: RouteContext) {
       userId: viewer?.id
     });
 
-    return NextResponse.redirect(result.targetUrl);
+    return NextResponse.redirect(result.targetUrl, { status: 303 });
   } catch (error) {
     return NextResponse.redirect(
       new URL(
@@ -73,7 +73,8 @@ export async function POST(request: Request, context: RouteContext) {
           error: error instanceof Error ? error.message : "링크 이동에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

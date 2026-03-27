@@ -131,7 +131,14 @@ export default async function ProjectDetailPage({ params, searchParams }: Projec
                   {viewerState.savedProjectIds.includes(project.id) ? "저장됨" : "저장"}
                 </button>
               </form>
-            ) : null}
+            ) : (
+              <Link
+                href={`/auth/sign-in?next=${encodeURIComponent(`/p/${project.slug}`)}`}
+                className="grid place-items-center rounded-full border border-line bg-white px-5 py-3 text-sm font-semibold text-foreground"
+              >
+                로그인 후 저장
+              </Link>
+            )}
 
             {canManage ? (
               <Link href="/me/projects" className="grid place-items-center rounded-full border border-line bg-white px-5 py-3 text-sm font-semibold text-foreground">

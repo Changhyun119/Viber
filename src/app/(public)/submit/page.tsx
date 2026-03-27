@@ -48,8 +48,11 @@ export default async function SubmitPage({ searchParams }: SubmitPageProps) {
             <p className="mt-3 text-sm leading-7 text-white/90">
               업데이트와 피드백 요청은 여기서 받지 않습니다. owner 작업은 내 프로젝트 화면에서만 이어집니다.
             </p>
-            <Link href={viewer ? "/me/projects" : "/"} className="mt-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-foreground">
-              {viewer ? "내 프로젝트로 이동" : "로그인 후 내 프로젝트 열기"}
+            <Link
+              href={viewer ? "/me/projects" : "/auth/sign-in?next=%2Fme%2Fprojects"}
+              className="mt-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-foreground"
+            >
+              {viewer ? "내 프로젝트로 이동" : "로그인하고 내 프로젝트 열기"}
             </Link>
           </div>
         </div>

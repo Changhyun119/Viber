@@ -107,7 +107,8 @@ export async function POST(request: Request, context: RouteContext) {
           notice: "프로젝트 정보를 저장했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   } catch (error) {
     return NextResponse.redirect(
@@ -116,7 +117,8 @@ export async function POST(request: Request, context: RouteContext) {
           error: error instanceof Error ? error.message : "프로젝트 수정에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { SessionProfile } from "@/lib/auth/session";
 import type { ProjectCommentModel } from "@/lib/services/read-models";
 import { formatRelative } from "@/lib/utils/date";
@@ -137,6 +139,14 @@ export function CommentThread({ comments, viewer, projectId, projectSlug }: Comm
       ) : (
         <div className="rounded-[28px] border border-dashed border-line bg-white/80 px-5 py-5 text-sm text-foreground-muted">
           댓글과 저장 기능은 로그인 후 사용할 수 있습니다.
+          <div className="mt-4">
+            <Link
+              href={`/auth/sign-in?next=${encodeURIComponent(`/p/${projectSlug}#comments`)}`}
+              className="inline-flex rounded-full border border-line bg-white px-4 py-2 font-semibold text-foreground"
+            >
+              로그인하고 댓글 남기기
+            </Link>
+          </div>
         </div>
       )}
 

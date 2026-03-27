@@ -130,7 +130,14 @@ export function ProjectCard({ project, viewer, saved = false, featured = false, 
                   {saved ? "저장됨" : "저장"}
                 </button>
               </form>
-            ) : null}
+            ) : (
+              <Link
+                href={`/auth/sign-in?next=${encodeURIComponent(`/p/${project.slug}`)}`}
+                className="rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-foreground transition hover:-translate-y-0.5"
+              >
+                로그인
+              </Link>
+            )}
           </div>
         </div>
       </div>

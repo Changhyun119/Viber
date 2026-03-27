@@ -5,7 +5,7 @@ import { requireAdminProfile } from "@/lib/auth/session";
 import { getAdminProjectsData } from "@/lib/services/read-models";
 
 export default async function AdminFeaturePage() {
-  await requireAdminProfile();
+  await requireAdminProfile("/admin/feature");
   const projects = await getAdminProjectsData();
   const publishedProjects = projects.filter((project) => project.status === "published");
 

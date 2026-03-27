@@ -11,8 +11,8 @@ type RouteContext = {
 };
 
 export async function POST(request: Request, context: RouteContext) {
-  const viewer = await requireCurrentProfile();
   const { token } = await context.params;
+  const viewer = await requireCurrentProfile(`/claim/${token}`);
   const formData = await request.formData();
 
   try {
@@ -30,7 +30,8 @@ export async function POST(request: Request, context: RouteContext) {
           notice: "프로젝트 소유권을 연결했고 즉시 공개 상태로 전환했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   } catch (error) {
     return NextResponse.redirect(
@@ -39,7 +40,8 @@ export async function POST(request: Request, context: RouteContext) {
           error: error instanceof Error ? error.message : "claim 처리에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

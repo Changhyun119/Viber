@@ -40,7 +40,7 @@ function ModerationForm({
 }
 
 export default async function AdminModerationPage() {
-  await requireAdminProfile();
+  await requireAdminProfile("/admin/moderation");
   const queue = await getModerationQueue();
 
   return (

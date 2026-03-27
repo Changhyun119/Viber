@@ -28,7 +28,7 @@ export async function POST(request: Request, context: RouteContext) {
 
     revalidatePath(`/p/${result.slug}`);
 
-    return NextResponse.redirect(new URL(buildRedirectPath(parsed.redirectTo, { notice: "댓글을 수정했습니다." }), request.url));
+    return NextResponse.redirect(new URL(buildRedirectPath(parsed.redirectTo, { notice: "댓글을 수정했습니다." }), request.url), { status: 303 });
   } catch (error) {
     return NextResponse.redirect(
       new URL(
@@ -36,7 +36,8 @@ export async function POST(request: Request, context: RouteContext) {
           error: error instanceof Error ? error.message : "댓글 수정에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

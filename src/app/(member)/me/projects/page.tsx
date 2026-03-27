@@ -56,7 +56,7 @@ function getStatusGuide(status: string) {
 }
 
 export default async function MyProjectsPage({ searchParams }: MyProjectsPageProps) {
-  const viewer = await requireCurrentProfile();
+  const viewer = await requireCurrentProfile("/me/projects");
   const params = await searchParams;
   const projects = await getOwnedProjectManagementData(viewer.id);
 

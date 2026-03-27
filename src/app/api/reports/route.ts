@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     revalidatePath(parsed.redirectTo);
 
-    return NextResponse.redirect(new URL(buildRedirectPath(parsed.redirectTo, { notice: "신고가 접수되었습니다." }), request.url));
+    return NextResponse.redirect(new URL(buildRedirectPath(parsed.redirectTo, { notice: "신고가 접수되었습니다." }), request.url), { status: 303 });
   } catch (error) {
     return NextResponse.redirect(
       new URL(
@@ -39,7 +39,8 @@ export async function POST(request: Request) {
           error: error instanceof Error ? error.message : "신고 접수에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

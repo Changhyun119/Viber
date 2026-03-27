@@ -57,7 +57,7 @@ export async function POST(request: Request) {
         ? "프로젝트를 공개했습니다. 바로 상세와 내 프로젝트 화면에서 확인할 수 있습니다."
         : "프로젝트를 제출했습니다. 처리 상태를 내 프로젝트에서 확인해 주세요.";
 
-    return NextResponse.redirect(new URL(buildRedirectPath(targetPath, { notice }), request.url));
+    return NextResponse.redirect(new URL(buildRedirectPath(targetPath, { notice }), request.url), { status: 303 });
   } catch (error) {
     return NextResponse.redirect(
       new URL(
@@ -65,7 +65,8 @@ export async function POST(request: Request) {
           error: error instanceof Error ? error.message : "프로젝트 제출에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

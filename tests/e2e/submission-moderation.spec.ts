@@ -1,21 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-async function loginAs(page: Page, role: "member" | "admin") {
-  await page.goto("/");
-  await page
-    .getByRole("button", {
-      name: role === "member" ? "회원" : "관리자"
-    })
-    .click();
-
-  await expect(page.getByRole("button", { name: "로그아웃" })).toBeVisible();
-  await expect(page.getByText(role === "member" ? "데모 메이커" : "운영 관리자")).toBeVisible();
-}
-
-async function logout(page: Page) {
-  await page.getByRole("button", { name: "로그아웃" }).click();
-  await expect(page.getByRole("button", { name: "회원" })).toBeVisible();
-}
+import { loginWithMagicLink, logout, TEST_ADMIN_EMAIL, TEST_MEMBER_EMAIL } from "./supabase-auth";
 
 async function fillLaunchForm(page: Page, input: { title: string; liveUrl: string; githubUrl: string; ownerEmail?: string }) {
   await page.getByLabel("프로젝트 이름").fill(input.title);
@@ -58,7 +43,8 @@ test.describe("문서 기준 제출/소유권 흐름", () => {
     const liveUrl = `https://loop-pilot-${suffix}.local.test`;
     const githubUrl = `https://github.com/local/loop-pilot-${suffix}`;
 
-    await loginAs(page, "member");
+    await loginWithMagicLink(page, TEST_MEMBER_EMAIL, "/me/projects");
+    await expect(page.getByRole("button", { name: "로그아웃" })).toBeVisible();
     await page.goto("/submit");
     await fillLaunchForm(page, { title, liveUrl, githubUrl });
     await page.getByRole("button", { name: "런치 제출" }).click();
@@ -100,7 +86,7 @@ test.describe("문서 기준 제출/소유권 흐름", () => {
       title,
       liveUrl,
       githubUrl,
-      ownerEmail: "member@local.test"
+      ownerEmail: TEST_MEMBER_EMAIL
     });
     await page.getByRole("button", { name: "런치 제출" }).click();
 
@@ -115,8 +101,7 @@ test.describe("문서 기준 제출/소유권 흐름", () => {
     await page.goto(previewHref!);
     await expect(page.getByRole("heading", { name: "페이지를 찾을 수 없습니다." })).toBeVisible();
 
-    await loginAs(page, "member");
-    await page.goto(claimPath);
+    await loginWithMagicLink(page, TEST_MEMBER_EMAIL, claimPath);
     await page.getByRole("button", { name: "이 계정으로 소유권 연결" }).click();
 
     await expect(page).toHaveURL(/\/me\/projects/);
@@ -127,5 +112,15 @@ test.describe("문서 기준 제출/소유권 흐름", () => {
     await logout(page);
     await page.goto(previewHref!);
     await expect(page.locator("h1")).toHaveText(title);
+  });
+
+  test("관리자 로그인으로 운영 페이지에 접근할 수 있다", async ({ page }) => {
+    test.setTimeout(120_000);
+
+    await loginWithMagicLink(page, TEST_ADMIN_EMAIL, "/admin/moderation");
+
+    await expect(page).toHaveURL(/\/admin\/moderation/);
+    await expect(page.getByRole("heading", { name: "운영 큐" })).toBeVisible();
+    await expect(page.getByText("소유권 연결 대기")).toBeVisible();
   });
 });

@@ -8,7 +8,7 @@ import { requireCurrentProfile } from "@/lib/auth/session";
 import { getSavedProjects, getViewerState } from "@/lib/services/read-models";
 
 export default async function SavedProjectsPage() {
-  const viewer = await requireCurrentProfile();
+  const viewer = await requireCurrentProfile("/me/saved");
   const viewerState = await getViewerState(viewer.id);
   const items = await getSavedProjects(viewer.id);
 

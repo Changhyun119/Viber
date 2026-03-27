@@ -35,7 +35,8 @@ export async function POST(request: Request) {
           notice: result.status === "published" ? "활동을 바로 공개했습니다." : "활동을 등록했고 공개 전 상태로 저장했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   } catch (error) {
     return NextResponse.redirect(
@@ -44,7 +45,8 @@ export async function POST(request: Request) {
           error: error instanceof Error ? error.message : "활동 추가에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

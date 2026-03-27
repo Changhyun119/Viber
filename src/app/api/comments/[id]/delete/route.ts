@@ -27,7 +27,8 @@ export async function POST(request: Request, context: RouteContext) {
           notice: "댓글을 삭제했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   } catch (error) {
     return NextResponse.redirect(
@@ -36,7 +37,8 @@ export async function POST(request: Request, context: RouteContext) {
           error: error instanceof Error ? error.message : "댓글 삭제에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

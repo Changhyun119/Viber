@@ -102,7 +102,7 @@ export async function POST(request: Request) {
     revalidatePath("/admin/projects");
     revalidatePath("/admin/feature");
 
-    return NextResponse.redirect(new URL(buildRedirectPath(parsed.redirectTo, { notice: "운영 액션을 적용했습니다." }), request.url));
+    return NextResponse.redirect(new URL(buildRedirectPath(parsed.redirectTo, { notice: "운영 액션을 적용했습니다." }), request.url), { status: 303 });
   } catch (error) {
     return NextResponse.redirect(
       new URL(
@@ -110,7 +110,8 @@ export async function POST(request: Request) {
           error: error instanceof Error ? error.message : "운영 액션 적용에 실패했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   }
 }

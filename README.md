@@ -42,17 +42,22 @@ npm run dev
 npx next build
 ```
 
-## 데모 계정
+## Supabase Auth 메모
 
-상단 버튼으로 바로 로그인할 수 있습니다.
+Supabase 환경변수를 채우면 `/auth/sign-in` 에서 이메일 매직링크 로그인이 동작합니다.
 
-- `데모 회원 로그인`
-- `관리자 로그인`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- 선택: `ADMIN_BOOTSTRAP_EMAILS`
 
-기본 계정 정보:
+`ADMIN_BOOTSTRAP_EMAILS` 는 실제 Supabase 로그인 사용자를 첫 관리자 계정으로 자동 승격할 때만 필요합니다. 이 값을 비워둬도 일반 회원 로그인은 계속 사용할 수 있고, 로그인 후 아래 명령으로 관리자로 승격할 수 있습니다.
 
-- 회원: `member@local.test`
-- 관리자: `admin@local.test`
+```bash
+npm run auth:promote-admin -- your@email.com
+```
+
+로그아웃은 헤더에서 바로 처리되고, 회원 전용 페이지는 로그인 후 원래 보려던 경로로 다시 돌아오게 구성했습니다.
 
 ## 현재 구현 범위
 
@@ -108,7 +113,7 @@ npm run jobs:check-links
 로컬 HTTP 검증 기준으로 아래 흐름도 확인했습니다.
 
 - 홈, 탐색, 상세 페이지 `200 OK`
-- 회원 로그인 후 `내 프로젝트`, `저장 목록` 접근
+- Supabase 로그인 후 `내 프로젝트`, `저장 목록` 접근
 - 저장 API 반영
 - 댓글 등록 반영
 - owner 런치 즉시 공개 및 update 작성 반영

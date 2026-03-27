@@ -11,19 +11,12 @@ type SiteHeaderProps = {
 function LoginForms() {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="mr-1 text-xs font-semibold uppercase tracking-[0.16em] text-foreground-muted">데모</span>
-      <form action="/api/dev/login" method="post">
-        <input type="hidden" name="role" value="member" />
-        <button className="rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-foreground transition hover:-translate-y-0.5">
-          회원
-        </button>
-      </form>
-      <form action="/api/dev/login" method="post">
-        <input type="hidden" name="role" value="admin" />
-        <button className="rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-foreground transition hover:-translate-y-0.5">
-          관리자
-        </button>
-      </form>
+      <Link
+        href="/auth/sign-in?next=/me/projects"
+        className="rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-foreground transition hover:-translate-y-0.5"
+      >
+        이메일 로그인
+      </Link>
     </div>
   );
 }
@@ -31,8 +24,11 @@ function LoginForms() {
 function LoggedInControls({ viewer }: { viewer: SessionProfile }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <div className="rounded-full bg-[rgba(47,106,97,0.08)] px-4 py-2 text-sm font-semibold text-green">{viewer.displayName}</div>
-      <form action="/api/dev/logout" method="post">
+      <div className="flex flex-wrap items-center gap-2 rounded-full bg-[rgba(47,106,97,0.08)] px-4 py-2 text-sm font-semibold text-green">
+        <span>{viewer.displayName}</span>
+        {viewer.role === "admin" ? <span className="rounded-full bg-white px-2 py-0.5 text-[11px] font-bold text-foreground">ADMIN</span> : null}
+      </div>
+      <form action="/api/auth/logout" method="post">
         <button className="rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-foreground transition hover:-translate-y-0.5">
           로그아웃
         </button>

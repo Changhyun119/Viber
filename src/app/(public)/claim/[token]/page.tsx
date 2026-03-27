@@ -52,6 +52,14 @@ export default async function ClaimPage({ params, searchParams }: ClaimPageProps
               ) : (
                 <div className="rounded-[28px] border border-line bg-white p-5 text-sm leading-7 text-foreground-muted">
                   소유권 연결에는 로그인 세션이 필요합니다. 로그인한 뒤 다시 이 페이지를 열면 연결 버튼이 표시됩니다.
+                  <div className="mt-4">
+                    <Link
+                      href={`/auth/sign-in?next=${encodeURIComponent(`/claim/${token}`)}`}
+                      className="inline-flex rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-foreground"
+                    >
+                      이메일 로그인하기
+                    </Link>
+                  </div>
                 </div>
               )}
 

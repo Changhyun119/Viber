@@ -64,7 +64,8 @@ export async function POST(request: Request, context: RouteContext) {
           notice: featured ? "피처드 지정이 반영되었습니다." : "피처드 지정이 해제되었습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   } catch (error) {
     return NextResponse.json(

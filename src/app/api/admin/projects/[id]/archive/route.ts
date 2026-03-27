@@ -40,7 +40,8 @@ export async function POST(request: Request, context: RouteContext) {
           notice: "프로젝트를 보관 상태로 전환했습니다."
         }),
         request.url
-      )
+      ),
+      { status: 303 }
     );
   } catch (error) {
     return NextResponse.json(
