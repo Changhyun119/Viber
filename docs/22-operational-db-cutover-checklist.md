@@ -12,7 +12,7 @@
 
 ## 2. 현재 상태
 
-현재 앱은 `DATABASE_URL` 하나를 기준으로 동작한다.
+현재 앱 런타임은 `DATABASE_URL` 을 기준으로 동작하고, migration 실행은 `MIGRATION_DATABASE_URL` 이 있으면 그 값을 우선 사용한다.
 
 - Drizzle config: [drizzle.config.ts](/Users/choh/ideab/viber/drizzle.config.ts)
 - DB 연결 진입점: [src/db/index.ts](/Users/choh/ideab/viber/src/db/index.ts)
@@ -21,13 +21,14 @@
 
 - `postgres://postgres:postgres@127.0.0.1:54329/vibe_showcase`
 
-즉, 운영 전환의 핵심은 코드 변경이 아니라 `DATABASE_URL` 을 운영 DB로 바꾸고, 같은 migration 경로를 그대로 적용하는 것이다.
+즉, 운영 전환의 핵심은 코드 변경이 아니라 환경 프로필을 분리하고, 같은 migration 경로를 그대로 적용하는 것이다.
 
 ## 3. 전환 전 준비물
 
 필수:
 
 - 운영 `DATABASE_URL`
+- 필요 시 `MIGRATION_DATABASE_URL`
 - 운영 Supabase 프로젝트
 - 운영 DB 접속 허용 상태
 - 현재 migration 전체
@@ -45,6 +46,10 @@
 
 - Docker Postgres 사용
 - 테스트/개발용 seed 허용
+- 권장: `DATABASE_URL=로컬 DB`
+- `MIGRATION_DATABASE_URL` 은 비워두거나 로컬 DB로 동일하게 사용
+- 전환 명령:
+  - `npm run db:profile:local-dev`
 
 ### preview
 
@@ -57,6 +62,10 @@
 - 실제 운영용 Supabase Postgres
 - seed는 최소 관리자/샘플만 허용
 - 테스트 데이터 금지
+- 권장: 앱 런타임은 pooler 연결 문자열, migration 은 direct 연결 문자열
+- 전환 명령:
+  - `npm run db:profile:prod-migrate`
+  - `npm run db:profile:prod-app`
 
 ## 5. 컷오버 절차
 
@@ -64,7 +73,9 @@
 
 - Supabase 대시보드에서 운영 DB 연결 문자열 확인
 - `DATABASE_URL` 을 운영용 값으로 준비
+- 로컬에서 migration 을 직접 실행할 경우 `MIGRATION_DATABASE_URL` 을 direct 연결 문자열로 준비
 - 애플리케이션 배포 환경변수와 로컬 `.env` 를 혼동하지 않도록 분리
+- 일상적인 기능 개발 중에는 로컬 `DATABASE_URL` 을 유지하고, 운영 반영 시점에만 `MIGRATION_DATABASE_URL` 을 운영 DB로 바꾸는 흐름을 권장
 
 ### 2단계. 현재 대상 확인
 
@@ -72,6 +83,8 @@
 
 ```bash
 npm run db:target
+npm run db:profile -- status
+npm run db:check-remote-runtime
 ```
 
 이 명령은 비밀번호를 출력하지 않고 다음만 보여준다.
@@ -91,6 +104,12 @@ npm run db:migrate
 
 - 운영에서는 반드시 최신 코드와 같은 migration 집합으로 실행한다.
 - 로컬 seed를 먼저 넣지 않는다.
+- `npm run db:seed` 는 기본적으로 원격 DB에서 차단된다.
+- 권장:
+  - 앱 런타임은 `DATABASE_URL` 에 pooler 연결 문자열 사용
+  - 로컬 migration 실행은 `MIGRATION_DATABASE_URL` 에 direct 연결 문자열 사용
+  - 실제 작업 순서는 `npm run db:profile:prod-migrate` -> `npm run db:migrate`
+  - 운영 DB 기준 앱 기동 확인은 `npm run db:check-remote-runtime` 으로 별도 검증한다
 
 ### 4단계. 최소 seed 또는 관리자 준비
 
@@ -158,6 +177,7 @@ npm run db:migrate
 운영 배포에는 최소 아래 값이 필요하다.
 
 - `DATABASE_URL`
+- `MIGRATION_DATABASE_URL`
 - `NEXT_PUBLIC_APP_URL`
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
@@ -188,4 +208,4 @@ npm run db:migrate
 ## 10. 현재 결론
 
 현재 코드 구조는 운영 DB 전환 준비가 되어 있다.
-남은 것은 운영 `DATABASE_URL` 확보와 컷오버 실행 순서의 엄수다.
+남은 것은 운영 `DATABASE_URL`, 필요 시 `MIGRATION_DATABASE_URL` 확보와 컷오버 실행 순서의 엄수다.

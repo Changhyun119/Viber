@@ -1,6 +1,7 @@
 import { sql as drizzleSql } from "drizzle-orm";
 
 import { db, sql } from "../src/db";
+import { getDbScope } from "./db-target-utils";
 import {
   comments,
   linkHealthChecks,
@@ -20,6 +21,15 @@ import { defaultTagCatalog } from "../src/lib/constants";
 import { demoUserIds, seedProfiles, seedProjects } from "../src/lib/seed-data";
 
 async function main() {
+  const dbScope = getDbScope(process.env.DATABASE_URL);
+  const allowRemoteSeed = process.env.ALLOW_REMOTE_SEED === "true";
+
+  if (dbScope === "remote" && !allowRemoteSeed) {
+    throw new Error(
+      "원격 DB에 seed를 실행할 수 없습니다. 로컬 개발 DB에서만 실행하거나, 정말 필요한 경우 ALLOW_REMOTE_SEED=true 를 명시하세요.",
+    );
+  }
+
   await db.transaction(async (tx) => {
     await tx.execute(drizzleSql.raw(`
       TRUNCATE TABLE

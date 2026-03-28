@@ -44,6 +44,7 @@
 21. [21-supabase-custom-smtp-runbook.md](./21-supabase-custom-smtp-runbook.md)
 22. [22-operational-db-cutover-checklist.md](./22-operational-db-cutover-checklist.md)
 23. [23-domain-verification-runbook.md](./23-domain-verification-runbook.md)
+24. [24-vercel-deployment-runbook.md](./24-vercel-deployment-runbook.md)
 
 ## 문서 맵
 
@@ -190,6 +191,12 @@
   - `_viber-verify` 레코드 규칙
   - live URL 변경 시 무효화 규칙
   - 로컬 검증 보조 명령
+
+- [24-vercel-deployment-runbook.md](./24-vercel-deployment-runbook.md)
+  - Vercel 프로젝트 설정 순서
+  - 환경변수 입력 항목
+  - 도메인 연결과 운영 URL 반영
+  - 배포 직후 smoke test 준비
 
 ## 현재 상태
 

@@ -34,6 +34,39 @@ npm run db:seed
 npm run db:target
 ```
 
+DB 프로필을 전환:
+
+```bash
+npm run db:profile -- status
+npm run db:profile:local-dev
+npm run db:profile:prod-migrate
+npm run db:profile:prod-app
+```
+
+- `local-dev`: 앱과 마이그레이션 모두 로컬 Docker DB를 사용한다.
+- `prod-migrate`: 앱은 계속 로컬 DB를 사용하고, 마이그레이션만 운영 DB를 사용한다.
+- `prod-app`: 앱과 마이그레이션 모두 운영 DB를 사용한다.
+- 첫 실행 시 현재 운영 연결값을 `.env.db-profiles.json` 에 저장한다. 이 파일은 git에 올라가지 않는다.
+
+운영 전환 시 권장:
+
+- `DATABASE_URL`: 앱 런타임용 연결 문자열
+- `MIGRATION_DATABASE_URL`: 로컬에서 migration 실행 시 사용할 직접 연결 문자열
+
+예를 들어 Supabase 운영 DB를 사용할 때는:
+
+- Vercel `DATABASE_URL` 은 pooler 연결 문자열을 사용
+- 로컬 `npm run db:migrate` 는 `MIGRATION_DATABASE_URL` 로 direct 연결 문자열을 사용하는 편이 안전하다
+- 평소 로컬 기능 개발 중에는 `DATABASE_URL` 을 Docker 로컬 DB로 유지하고, 운영 반영 시에만 `MIGRATION_DATABASE_URL` 을 운영 DB로 바꿔 동일한 마이그레이션 파일을 적용하는 흐름을 권장한다
+- `npm run db:seed` 는 기본적으로 원격 DB에서 차단된다. 정말 필요한 경우에만 `ALLOW_REMOTE_SEED=true` 를 명시해 의도적으로 실행한다
+- 운영 DB 기준 런타임 smoke test:
+
+```bash
+npm run db:check-remote-runtime
+```
+
+- 이 명령은 운영 DB에 임시 프로젝트를 넣고, 별도 포트에서 원격 런타임 서버를 띄운 뒤 공개 경로와 프로젝트 상세/API를 확인하고, 마지막에 임시 데이터를 정리한다.
+
 개발 서버 실행:
 
 ```bash
