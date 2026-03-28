@@ -33,8 +33,13 @@ export async function POST(request: NextRequest) {
     }
 
     const {
-      data: { user }
-    } = await supabase.auth.getUser();
+      data: { user },
+      error: userError
+    } = await supabase.auth.getUser(payload.accessToken);
+
+    if (userError) {
+      return NextResponse.json({ error: userError.message }, { status: 401 });
+    }
 
     if (!user) {
       return NextResponse.json({ error: "로그인 세션을 확인하지 못했습니다." }, { status: 401 });
