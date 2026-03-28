@@ -3,8 +3,11 @@ import Link from "next/link";
 import { FlashBanner } from "@/components/ui/flash-banner";
 import { PageShell } from "@/components/ui/page-shell";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { TurnstileField } from "@/components/forms/turnstile-field";
 import { categoryOptions, platformOptions, pricingOptions, stageOptions } from "@/lib/constants";
 import { getCurrentProfile } from "@/lib/auth/session";
+import { isTurnstileUsingTestKeys, turnstileSiteKey } from "@/lib/env";
+import { projectMediaAccept, projectMediaMaxFileSizeLabel } from "@/lib/storage/project-media";
 
 type SubmitPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -65,7 +68,7 @@ export default async function SubmitPage({ searchParams }: SubmitPageProps) {
           description="필수 정보만 먼저 보이게 두고, 추가 링크와 미디어는 아래 선택 입력에서 열 수 있게 구성했습니다."
         />
 
-        <form action="/api/submissions/project" method="post" className="grid gap-6 rounded-[36px] border border-line bg-[rgba(255,253,248,0.96)] p-6 shadow-soft">
+        <form action="/api/submissions/project" method="post" encType="multipart/form-data" className="grid gap-6 rounded-[36px] border border-line bg-[rgba(255,253,248,0.96)] p-6 shadow-soft">
           <input type="hidden" name="kind" value="launch" />
           <input type="hidden" name="verificationMethod" value={verificationMethod} />
           {viewer ? <input type="hidden" name="ownerEmail" value="" /> : null}
@@ -225,6 +228,24 @@ export default async function SubmitPage({ searchParams }: SubmitPageProps) {
               </label>
 
               <div className="grid gap-4 md:grid-cols-2">
+                {viewer ? (
+                  <>
+                    <label className="grid gap-2 text-sm font-semibold text-foreground">
+                      대표 이미지 파일
+                      <input type="file" name="coverImageFile" accept={projectMediaAccept} className="rounded-2xl border border-line bg-white px-4 py-3 font-normal" />
+                      <span className="text-xs font-normal text-foreground-muted">JPG, PNG, WEBP, GIF · 최대 {projectMediaMaxFileSizeLabel}</span>
+                    </label>
+                    <label className="grid gap-2 text-sm font-semibold text-foreground">
+                      갤러리 이미지 파일들
+                      <input type="file" name="galleryFiles" accept={projectMediaAccept} multiple className="rounded-2xl border border-line bg-white px-4 py-3 font-normal" />
+                      <span className="text-xs font-normal text-foreground-muted">최대 5개까지 업로드할 수 있습니다.</span>
+                    </label>
+                  </>
+                ) : (
+                  <div className="md:col-span-2 rounded-3xl border border-line bg-surface px-4 py-4 text-sm leading-7 text-foreground-muted">
+                    이미지 파일 업로드는 로그인한 멤버만 사용할 수 있습니다. 비회원 제출은 아래 URL 입력 또는 기본 포스터 생성으로 진행됩니다.
+                  </div>
+                )}
                 <label className="grid gap-2 text-sm font-semibold text-foreground">
                   대표 이미지 URL
                   <input name="coverImageUrl" className="rounded-2xl border border-line bg-white px-4 py-3 font-normal" placeholder="비워두면 기본 포스터를 생성합니다." />
@@ -259,6 +280,17 @@ export default async function SubmitPage({ searchParams }: SubmitPageProps) {
               </div>
             </div>
           </details>
+
+          <section className="grid gap-4 rounded-[28px] border border-line bg-white p-5">
+            <div>
+              <h2 className="text-lg font-bold tracking-tight text-foreground">스팸 방지 확인</h2>
+              <p className="mt-1 text-sm text-foreground-muted">
+                자동 제출을 막기 위해 프로젝트 제출 전 사람 확인을 거칩니다.
+                {isTurnstileUsingTestKeys ? " 현재 로컬에서는 Cloudflare 공식 테스트 키를 사용합니다." : ""}
+              </p>
+            </div>
+            <TurnstileField siteKey={turnstileSiteKey} />
+          </section>
 
           <div className="flex flex-wrap gap-3">
             <button className="rounded-full bg-[#111827] px-5 py-3 text-sm font-semibold text-white">런치 제출</button>

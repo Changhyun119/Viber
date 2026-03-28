@@ -7,6 +7,7 @@ import { ProjectEventBeacon } from "@/components/analytics/project-event-beacon"
 import { ActivityFeed } from "@/components/projects/activity-feed";
 import { CommentThread } from "@/components/projects/comment-thread";
 import { ProjectGrid } from "@/components/projects/project-grid";
+import { TurnstileField } from "@/components/forms/turnstile-field";
 import { FlashBanner } from "@/components/ui/flash-banner";
 import { PageShell } from "@/components/ui/page-shell";
 import { ProseBlock } from "@/components/ui/prose-block";
@@ -21,7 +22,8 @@ import {
   verificationLabels
 } from "@/lib/constants";
 import { getCurrentProfile } from "@/lib/auth/session";
-import { getProjectDetailBySlug, getViewerState } from "@/lib/services/read-models";
+import { turnstileSiteKey } from "@/lib/env";
+import { getProjectDetailBySlug, getViewerState, type ProjectPostModel } from "@/lib/services/read-models";
 import { formatDate, formatRelative } from "@/lib/utils/date";
 
 type ProjectDetailPageProps = {
@@ -54,7 +56,7 @@ export default async function ProjectDetailPage({ params, searchParams }: Projec
   const isOwner = viewerState.ownedProjectIds.includes(project.id);
   const canManage = isOwner || viewer?.role === "admin";
   const canView = ["published", "limited", "archived"].includes(project.status) || canManage;
-  const visiblePosts = canManage ? project.posts : project.posts.filter((post) => post.status === "published");
+  const visiblePosts: ProjectPostModel[] = canManage ? project.posts : project.posts.filter((post) => post.status === "published");
   const visibleComments = project.comments.filter((comment) => comment.status !== "hidden");
 
   if (!canView) {
@@ -208,12 +210,100 @@ export default async function ProjectDetailPage({ params, searchParams }: Projec
 
           <div id="activity" className="space-y-5">
             <SectionHeading eyebrow="활동" title="런치 이후의 변화" description="하나의 프로젝트 아래에 업데이트와 피드백 요청이 시간순으로 쌓입니다." />
-            <ActivityFeed posts={visiblePosts} projectId={project.id} projectSlug={project.slug} />
+            <ActivityFeed posts={visiblePosts} projectId={project.id} projectSlug={project.slug} turnstileSiteKey={turnstileSiteKey} />
+          </div>
+
+          <div id="write-feedback" className="space-y-5">
+            <SectionHeading
+              eyebrow="Feedback"
+              title="구조화된 피드백 남기기"
+              description="댓글보다 길고 구조적인 사용 후기는 feedback 활동으로 남길 수 있습니다."
+            />
+            {viewer ? (
+              canManage ? (
+                <div className="rounded-[28px] border border-line bg-white/90 px-5 py-5 text-sm text-foreground-muted shadow-soft">
+                  메이커와 관리자는 내 프로젝트 화면에서 업데이트와 피드백 요청을 추가할 수 있습니다.
+                  <div className="mt-4">
+                    <Link href="/me/projects" className="inline-flex rounded-full border border-line bg-white px-4 py-2 font-semibold text-foreground">
+                      내 프로젝트에서 작성
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <form action={`/api/projects/${project.id}/posts`} method="post" className="rounded-[28px] border border-line bg-white/90 p-5 shadow-soft">
+                  <input type="hidden" name="kind" value="feedback" />
+                  <input type="hidden" name="redirectTo" value={`/p/${project.slug}#write-feedback`} />
+                  <div className="grid gap-3">
+                    <label className="grid gap-2 text-sm font-semibold text-foreground">
+                      제목
+                      <input
+                        name="title"
+                        required
+                        placeholder="예: 온보딩 첫 단계에서 막힌 지점"
+                        className="rounded-2xl border border-line bg-white px-4 py-3 font-normal"
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm font-semibold text-foreground">
+                      요약
+                      <input
+                        name="summary"
+                        required
+                        placeholder="무엇이 좋았고 어디서 막혔는지 짧게 남겨 주세요."
+                        className="rounded-2xl border border-line bg-white px-4 py-3 font-normal"
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm font-semibold text-foreground">
+                      상세 피드백
+                      <textarea
+                        name="bodyMd"
+                        rows={5}
+                        required
+                        placeholder="실제로 눌러본 흐름, 기대와 달랐던 점, 개선되면 좋을 점을 구체적으로 적어 주세요."
+                        className="rounded-3xl border border-line bg-white px-4 py-3 font-normal"
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm font-semibold text-foreground">
+                      특히 전달하고 싶은 포인트
+                      <textarea
+                        name="requestedFeedbackMd"
+                        rows={3}
+                        placeholder="메이커가 먼저 확인하면 좋을 포인트가 있다면 남겨 주세요."
+                        className="rounded-3xl border border-line bg-white px-4 py-3 font-normal"
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm font-semibold text-foreground">
+                      참고 이미지 URL들
+                      <input
+                        name="mediaCsv"
+                        placeholder="쉼표로 구분해 입력"
+                        className="rounded-2xl border border-line bg-white px-4 py-3 font-normal"
+                      />
+                    </label>
+                    <div className="rounded-3xl border border-line bg-surface px-4 py-4 text-sm text-foreground-muted">
+                      멤버가 남긴 feedback 활동은 기본적으로 검토 대기 상태로 저장되고, 운영 기준을 통과하면 공개됩니다.
+                    </div>
+                    <button className="w-fit rounded-full bg-[#111827] px-5 py-2.5 text-sm font-semibold text-white">피드백 등록</button>
+                  </div>
+                </form>
+              )
+            ) : (
+              <div className="rounded-[28px] border border-dashed border-line bg-white/80 px-5 py-5 text-sm text-foreground-muted">
+                구조화된 feedback 활동 작성은 로그인한 멤버부터 사용할 수 있습니다.
+                <div className="mt-4">
+                  <Link
+                    href={`/auth/sign-in?next=${encodeURIComponent(`/p/${project.slug}#write-feedback`)}`}
+                    className="inline-flex rounded-full border border-line bg-white px-4 py-2 font-semibold text-foreground"
+                  >
+                    로그인하고 feedback 작성
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
 
           <div id="comments" className="space-y-5">
             <SectionHeading eyebrow="댓글" title="댓글과 피드백" description="프로젝트를 써본 사람들이 남긴 반응을 한 곳에서 확인할 수 있습니다." />
-            <CommentThread comments={visibleComments} viewer={viewer} projectId={project.id} projectSlug={project.slug} />
+            <CommentThread comments={visibleComments} viewer={viewer} projectId={project.id} projectSlug={project.slug} turnstileSiteKey={turnstileSiteKey} />
           </div>
         </div>
 
@@ -321,6 +411,7 @@ export default async function ProjectDetailPage({ params, searchParams }: Projec
                 <option value="misleading">허위 또는 오해 소지</option>
               </select>
               <textarea name="note" rows={4} placeholder="운영자가 참고할 메모를 남겨 주세요." className="rounded-3xl border border-line bg-white px-4 py-3 text-sm text-foreground placeholder:text-foreground-muted" />
+              <TurnstileField siteKey={turnstileSiteKey} />
               <button className="w-fit rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-foreground">신고 접수</button>
             </div>
           </form>

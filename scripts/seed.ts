@@ -1,8 +1,9 @@
+import { sql as drizzleSql } from "drizzle-orm";
+
 import { db, sql } from "../src/db";
 import {
   comments,
   linkHealthChecks,
-  magicLinks,
   moderationActions,
   profiles,
   projectClickEvents,
@@ -12,34 +13,35 @@ import {
   projects,
   projectSaves,
   projectTags,
-  rateLimitEvents,
   reports,
-  sessions,
   tags,
-  viewImpressionCounters
 } from "../src/db/schema";
 import { defaultTagCatalog } from "../src/lib/constants";
 import { demoUserIds, seedProfiles, seedProjects } from "../src/lib/seed-data";
 
 async function main() {
   await db.transaction(async (tx) => {
-    await tx.delete(viewImpressionCounters);
-    await tx.delete(rateLimitEvents);
-    await tx.delete(projectRankSnapshots);
-    await tx.delete(linkHealthChecks);
-    await tx.delete(moderationActions);
-    await tx.delete(reports);
-    await tx.delete(projectClickEvents);
-    await tx.delete(projectSaves);
-    await tx.delete(comments);
-    await tx.delete(projectTags);
-    await tx.delete(projectPosts);
-    await tx.delete(projectOwners);
-    await tx.delete(projects);
-    await tx.delete(tags);
-    await tx.delete(sessions);
-    await tx.delete(magicLinks);
-    await tx.delete(profiles);
+    await tx.execute(drizzleSql.raw(`
+      TRUNCATE TABLE
+        "view_impression_counters",
+        "rate_limit_events",
+        "project_rank_snapshots",
+        "link_health_checks",
+        "moderation_actions",
+        "reports",
+        "project_click_events",
+        "project_saves",
+        "comments",
+        "project_tags",
+        "project_posts",
+        "project_owners",
+        "projects",
+        "tags",
+        "sessions",
+        "magic_links",
+        "profiles"
+      RESTART IDENTITY CASCADE
+    `));
 
     await tx.insert(profiles).values(
       seedProfiles.map((profile) => ({
@@ -114,6 +116,7 @@ async function main() {
         project.posts.map((post) => ({
           id: post.id,
           projectId: project.id,
+          authorUserId: post.authorUserId ?? project.ownerUserId ?? null,
           type: post.type,
           title: post.title,
           summary: post.summary,
@@ -132,7 +135,9 @@ async function main() {
             projectId: project.id,
             postId: comment.postId ?? null,
             parentId: comment.parentId ?? null,
-            userId: comment.userId,
+            userId: "userId" in comment ? comment.userId : null,
+            guestName: "guestName" in comment ? comment.guestName : null,
+            guestSessionHash: "guestSessionHash" in comment ? comment.guestSessionHash : null,
             bodyMd: comment.bodyMd,
             status: comment.status ?? "active",
             createdAt: comment.createdAt,
