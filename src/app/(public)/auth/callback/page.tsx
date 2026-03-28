@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 
 import { PageShell } from "@/components/ui/page-shell";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { ensureAbsoluteUrl } from "@/lib/utils/urls";
 
 type CallbackStatus = "idle" | "processing" | "error";
@@ -48,17 +47,6 @@ export default function AuthCallbackPage() {
         setMessage("인증 세션을 확인하고 있습니다.");
 
         try {
-          const supabase = createSupabaseBrowserClient();
-          const { error: sessionError } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken
-          });
-
-          if (sessionError) {
-            window.location.replace(buildSignInPath(nextPath, sessionError.message));
-            return;
-          }
-
           const response = await fetch("/api/auth/callback/session", {
             method: "POST",
             headers: {
