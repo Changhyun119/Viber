@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
 import { buildPostVerificationPath, ensureProfileForSupabaseUser } from "@/lib/auth/session";
+import { createSupabaseAdminClient, isSupabaseAdminConfigured } from "@/lib/supabase/admin";
 import { createSupabaseRouteClient } from "@/lib/supabase/route";
 import { isSupabaseConfigured } from "@/lib/supabase/shared";
 import { ensureAbsoluteUrl } from "@/lib/utils/urls";
@@ -32,13 +33,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    const {
-      data: { user },
-      error: userError
-    } = await supabase.auth.getUser(payload.accessToken);
+    let userErrorMessage: string | null = null;
+    let user = null;
 
-    if (userError) {
-      return NextResponse.json({ error: userError.message }, { status: 401 });
+    if (isSupabaseAdminConfigured()) {
+      const adminSupabase = createSupabaseAdminClient();
+      const {
+        data: { user: adminUser },
+        error: adminUserError
+      } = await adminSupabase.auth.getUser(payload.accessToken);
+
+      user = adminUser;
+      userErrorMessage = adminUserError?.message ?? null;
+    }
+
+    if (!user) {
+      const {
+        data: { user: routeUser },
+        error: routeUserError
+      } = await supabase.auth.getUser(payload.accessToken);
+
+      user = routeUser;
+      userErrorMessage = routeUserError?.message ?? userErrorMessage;
+    }
+
+    if (userErrorMessage && !user) {
+      return NextResponse.json({ error: userErrorMessage }, { status: 401 });
     }
 
     if (!user) {
