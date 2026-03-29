@@ -110,18 +110,20 @@ export function MinimalNew() {
       {/* Header */}
       <header className="sticky top-[38px] z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
         <div className="mx-auto flex h-12 max-w-3xl items-center justify-between px-6">
-          <Link href="/" className="text-base font-bold text-white">
+          <button onClick={() => navigate("home")} className="text-base font-bold text-white">
             Viber
-          </Link>
+          </button>
           <nav className="flex items-center gap-6">
             {V3_NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm text-neutral-400 transition hover:text-white"
+              <button
+                key={item.page}
+                onClick={() => navigate(item.page)}
+                className={`text-sm transition hover:text-white ${
+                  subPage === item.page ? "text-white" : "text-neutral-400"
+                }`}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
           </nav>
           <Moon className="h-4 w-4 cursor-pointer text-neutral-500 hover:text-white" />

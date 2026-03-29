@@ -7,6 +7,7 @@ import {
   MessageCircle,
   Send,
 } from "lucide-react";
+import { useVariantNav } from "../landing-variant-switcher";
 
 /* ── scroll animation hook ── */
 function useScrollFadeIn<T extends HTMLElement>(threshold = 0.15) {
@@ -62,9 +63,9 @@ function AnimateIn({
 
 /* ── nav ── */
 const V3_NAV = [
-  { href: "/projects", label: "프로젝트" },
-  { href: "/trending", label: "트렌딩" },
-  { href: "/feedback", label: "피드백" },
+  { page: "products" as const, label: "프로젝트" },
+  { page: "trending" as const, label: "트렌딩" },
+  { page: "feedback" as const, label: "피드백" },
 ];
 
 /* ── dummy projects for feedback ── */
@@ -89,25 +90,26 @@ const DUMMY_PROJECTS = [
 ];
 
 export function MinimalFeedback() {
+  const { subPage, navigate } = useVariantNav();
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* Header */}
       <header className="sticky top-[38px] z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
         <div className="mx-auto flex h-12 max-w-3xl items-center justify-between px-6">
-          <Link href="/" className="text-base font-bold text-white">
+          <button onClick={() => navigate("home")} className="text-base font-bold text-white">
             Viber
-          </Link>
+          </button>
           <nav className="flex items-center gap-6">
             {V3_NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
+              <button
+                key={item.page}
+                onClick={() => navigate(item.page)}
                 className={`text-sm transition hover:text-white ${
-                  item.href === "/feedback" ? "text-white" : "text-neutral-400"
+                  subPage === item.page ? "text-white" : "text-neutral-400"
                 }`}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
           </nav>
           <Moon className="h-4 w-4 cursor-pointer text-neutral-500 hover:text-white" />
