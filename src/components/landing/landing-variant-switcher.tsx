@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback, createContext, useContext } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import type { LandingVariantProps } from "./types";
 import { VariantClassic } from "./variant-classic";
@@ -21,10 +22,10 @@ const VARIANT_KEYS = ["classic", "feature", "minimal"] as const;
 type VariantKey = (typeof VARIANT_KEYS)[number];
 type SubPage = "home" | "products" | "trending" | "new" | "feedback";
 
-const VARIANTS: { key: VariantKey; label: string }[] = [
-  { key: "classic", label: "1. 기본" },
-  { key: "feature", label: "2. 기능중심" },
-  { key: "minimal", label: "3. 다크 미니멀" },
+const VARIANTS: { key: VariantKey; label: string; href: string }[] = [
+  { key: "classic", label: "1. 기본", href: "/" },
+  { key: "feature", label: "2. 기능중심", href: "/feature" },
+  { key: "minimal", label: "3. 다크 미니멀", href: "/minimal" },
 ];
 
 /* ── context ── */
@@ -42,47 +43,37 @@ export function useVariantNav() {
   return useContext(VariantNavContext);
 }
 
+/* ── helpers ── */
+function buildSubPageHref(variant: VariantKey, page: SubPage): string {
+  if (variant === "classic") return "/";
+  if (page === "home") return `/${variant}`;
+  return `/${variant}/${page}`;
+}
+
 /* ── main component ── */
-export function LandingVariantSwitcher(props: LandingVariantProps) {
+type SwitcherProps = LandingVariantProps & {
+  activeVariant: VariantKey;
+  activeSubPage: string;
+};
+
+export function LandingVariantSwitcher({ activeVariant, activeSubPage, ...props }: SwitcherProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  // Read state from URL search params
-  const paramV = searchParams.get("v") as VariantKey | null;
-  const paramP = searchParams.get("p") as SubPage | null;
-
-  const activeKey: VariantKey =
-    paramV && VARIANT_KEYS.includes(paramV) ? paramV : "classic";
+  const activeKey: VariantKey = VARIANT_KEYS.includes(activeVariant) ? activeVariant : "classic";
   const activeIdx = VARIANTS.findIndex((v) => v.key === activeKey);
   const subPage: SubPage =
-    paramP && ["home", "products", "trending", "new", "feedback"].includes(paramP)
-      ? paramP
+    activeSubPage && ["home", "products", "trending", "new", "feedback"].includes(activeSubPage)
+      ? (activeSubPage as SubPage)
       : "home";
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Push URL changes
-  const pushParams = useCallback(
-    (v: VariantKey, p: SubPage) => {
-      const params = new URLSearchParams();
-      if (v !== "classic") params.set("v", v);
-      if (p !== "home") params.set("p", p);
-      const qs = params.toString();
-      router.push(qs ? `/?${qs}` : "/", { scroll: false });
-    },
-    [router],
-  );
-
-  const handleSelectVariant = (idx: number) => {
-    pushParams(VARIANTS[idx].key, "home");
-  };
-
   const handleNavigate = useCallback(
     (page: SubPage) => {
-      pushParams(activeKey, page);
+      router.push(buildSubPageHref(activeKey, page), { scroll: false });
     },
-    [activeKey, pushParams],
+    [activeKey, router],
   );
 
   function renderContent() {
@@ -124,9 +115,10 @@ export function LandingVariantSwitcher(props: LandingVariantProps) {
             </span>
             <div className="flex items-center gap-1.5">
               {VARIANTS.map((v, idx) => (
-                <button
+                <Link
                   key={v.key}
-                  onClick={() => handleSelectVariant(idx)}
+                  href={v.href}
+                  scroll={false}
                   className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
                     activeIdx === idx
                       ? "bg-white text-black"
@@ -134,7 +126,7 @@ export function LandingVariantSwitcher(props: LandingVariantProps) {
                   }`}
                 >
                   {v.label}
-                </button>
+                </Link>
               ))}
             </div>
           </div>
