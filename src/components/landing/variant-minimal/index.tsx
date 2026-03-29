@@ -71,11 +71,13 @@ function AnimateIn({
   );
 }
 
+import { useVariantNav } from "../landing-variant-switcher";
+
 /* ── nav ── */
 const V3_NAV = [
-  { href: "/projects", label: "프로젝트" },
-  { href: "/trending", label: "트렌딩" },
-  { href: "/feedback", label: "피드백" },
+  { page: "products" as const, label: "프로젝트" },
+  { page: "trending" as const, label: "트렌딩" },
+  { page: "feedback" as const, label: "피드백" },
 ];
 
 /* ── dummy data (DB가 비어 있을 때 사용) ── */
@@ -137,6 +139,7 @@ const PROBLEMS = [
 ];
 
 export function VariantMinimal({ data, viewer }: LandingVariantProps) {
+  const { subPage, navigate } = useVariantNav();
   const hasProjects = data.featured.length > 0;
 
   return (
@@ -144,18 +147,20 @@ export function VariantMinimal({ data, viewer }: LandingVariantProps) {
       {/* V3 헤더 — 미니멀 */}
       <header className="sticky top-[38px] z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
         <div className="mx-auto flex h-12 max-w-3xl items-center justify-between px-6">
-          <Link href="/" className="text-base font-bold text-white">
+          <button onClick={() => navigate("home")} className="text-base font-bold text-white">
             Viber
-          </Link>
+          </button>
           <nav className="flex items-center gap-6">
             {V3_NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm text-neutral-400 transition hover:text-white"
+              <button
+                key={item.page}
+                onClick={() => navigate(item.page)}
+                className={`text-sm transition hover:text-white ${
+                  subPage === item.page ? "text-white font-medium" : "text-neutral-400"
+                }`}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
           </nav>
           <Moon className="h-4 w-4 cursor-pointer text-neutral-500 hover:text-white" />

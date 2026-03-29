@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useVariantNav } from "../landing-variant-switcher";
 import {
   Search,
   Flame,

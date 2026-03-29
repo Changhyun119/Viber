@@ -200,23 +200,23 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
       {/* V2 header */}
       <header className="sticky top-[38px] z-50 border-b border-neutral-200 bg-[#FFFDF8]/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
+          <button onClick={() => navigate("home")} className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
             🚀 Viber
-          </Link>
+          </button>
           <nav className="flex items-center gap-1">
             {V2_NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
+              <button
+                key={item.page}
+                onClick={() => navigate(item.page)}
                 className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
-                  item.active
+                  subPage === item.page
                     ? "text-white"
                     : "text-neutral-600 hover:bg-neutral-100"
                 }`}
-                style={item.active ? { backgroundColor: ACCENT } : undefined}
+                style={subPage === item.page ? { backgroundColor: ACCENT } : undefined}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
           </nav>
           <div className="flex-1" />
