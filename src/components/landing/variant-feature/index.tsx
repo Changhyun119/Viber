@@ -123,15 +123,18 @@ const DUMMY_FEEDBACK = [
 
 const ROTATING_WORDS = ["API", "앱", "SaaS", "게임", "도구", "AI", "웹사이트", "플러그인"];
 
+import { useVariantNav } from "../landing-variant-switcher";
+
 const V2_NAV = [
-  { href: "/", label: "Home", active: true },
-  { href: "/products", label: "Products" },
-  { href: "/trending", label: "Trending" },
-  { href: "/new", label: "New" },
-  { href: "/feedback", label: "Feedback" },
+  { page: "home" as const, label: "Home" },
+  { page: "products" as const, label: "Products" },
+  { page: "trending" as const, label: "Trending" },
+  { page: "new" as const, label: "New" },
+  { page: "feedback" as const, label: "Feedback" },
 ];
 
 export function VariantFeature({ data, viewer }: LandingVariantProps) {
+  const { subPage, navigate } = useVariantNav();
   const [catTab, setCatTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [rotateIdx, setRotateIdx] = useState(0);
