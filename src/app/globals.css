@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-:root {
+:root,
+[data-theme="light"] {
   --background: #f6f3ee;
   --surface: #fffdf8;
   --surface-muted: #f2ece3;
@@ -15,6 +16,23 @@
   --warning: #b45309;
   --danger: #b42318;
   --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="dark"] {
+  --background: #0f1117;
+  --surface: #1a1d27;
+  --surface-muted: #252833;
+  --foreground: #e8eaed;
+  --foreground-muted: #9ba1ad;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+  --accent: #e07a5a;
+  --accent-strong: #f09070;
+  --green: #4ecdb5;
+  --violet: #8b93cc;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --shadow-soft: 0 16px 40px rgba(0, 0, 0, 0.3);
 }
 
 @theme inline {
@@ -55,6 +73,12 @@ body {
     "Noto Sans KR",
     "Segoe UI",
     sans-serif;
+}
+
+[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at top right, rgba(224, 122, 90, 0.06), transparent 22rem),
+    linear-gradient(180deg, #151720 0%, var(--background) 100%);
 }
 
 a {
@@ -141,4 +165,13 @@ button {
 .prose-block hr {
   border: 0;
   border-top: 1px solid var(--line);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 0.8s step-end infinite;
 }

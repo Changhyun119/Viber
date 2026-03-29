@@ -167,6 +167,7 @@ export type AdminProjectListItemModel = ProjectCardModel & {
 export type ExploreFilters = {
   query?: string;
   category?: string;
+  categories?: string[];
   platform?: string;
   stage?: string;
   pricing?: string;
@@ -471,7 +472,9 @@ function filterProjectCards(items: ProjectCardModel[], filters: ExploreFilters) 
   const query = filters.query?.trim().toLowerCase();
 
   return items.filter((item) => {
-    if (filters.category && filters.category !== "all" && item.category !== filters.category) return false;
+    const activeCategories = filters.categories?.filter((c) => c !== "all") ?? [];
+    if (activeCategories.length > 0 && !activeCategories.includes(item.category)) return false;
+    if (activeCategories.length === 0 && filters.category && filters.category !== "all" && item.category !== filters.category) return false;
     if (filters.platform && filters.platform !== "all" && item.platform !== filters.platform) return false;
     if (filters.stage && filters.stage !== "all" && item.stage !== filters.stage) return false;
     if (filters.pricing && filters.pricing !== "all" && item.badges.every((badge) => badge.toLowerCase() !== filters.pricing?.toLowerCase())) {
@@ -577,6 +580,7 @@ export async function getExploreData(filters: ExploreFilters = {}) {
     .filter((project) => {
       const hasDirectSearchContext = Boolean(
         filters.query?.trim() ||
+          (filters.categories?.filter((c) => c !== "all").length ?? 0) > 0 ||
           (filters.category && filters.category !== "all") ||
           (filters.platform && filters.platform !== "all") ||
           (filters.stage && filters.stage !== "all") ||

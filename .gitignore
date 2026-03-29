@@ -43,3 +43,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# harness / playground
+harness-*/
+harness-report.md
+*.playground.js
+playground.html
+.playwright-mcp/
+
+# screenshots
+*.png
+
+# claude
+.claude/
