@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { FlashBanner } from "@/components/ui/flash-banner";
 import { LandingVariantSwitcher } from "@/components/landing/landing-variant-switcher";
 import type { SerializedHomepageData } from "@/components/landing/types";
@@ -40,11 +41,13 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <div className="landing-fullpage">
       <FlashBanner notice={getTextParam(params.notice)} error={getTextParam(params.error)} />
-      <LandingVariantSwitcher
-        data={serializeHomepageData(data)}
-        viewer={viewer}
-        savedProjectIds={viewerState.savedProjectIds}
-      />
+      <Suspense>
+        <LandingVariantSwitcher
+          data={serializeHomepageData(data)}
+          viewer={viewer}
+          savedProjectIds={viewerState.savedProjectIds}
+        />
+      </Suspense>
     </div>
   );
 }
