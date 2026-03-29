@@ -196,12 +196,7 @@ export function FeatureFeedback() {
 
       {/* ── Feedback Cards ── */}
       <section className="bg-white px-4 py-16 sm:px-6">
-        <div
-          ref={cardsAnim.ref}
-          className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
-            cardsAnim.isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
-        >
+        <div className="mx-auto max-w-5xl">
           {feedbackProjects.length === 0 ? (
             <div className="py-20 text-center">
               <p className="text-lg font-semibold text-neutral-400">검색 결과가 없습니다</p>
