@@ -7,6 +7,7 @@ import {
   Moon,
   Search,
 } from "lucide-react";
+import { useVariantNav } from "../landing-variant-switcher";
 
 /* ── scroll animation hook ── */
 function useScrollFadeIn<T extends HTMLElement>(threshold = 0.15) {
@@ -62,9 +63,9 @@ function AnimateIn({
 
 /* ── nav ── */
 const V3_NAV = [
-  { href: "/projects", label: "프로젝트" },
-  { href: "/trending", label: "트렌딩" },
-  { href: "/feedback", label: "피드백" },
+  { page: "products" as const, label: "프로젝트" },
+  { page: "trending" as const, label: "트렌딩" },
+  { page: "feedback" as const, label: "피드백" },
 ];
 
 /* ── dummy projects with timeAgo ── */
@@ -89,6 +90,7 @@ const DUMMY_PROJECTS = [
 ];
 
 export function MinimalNew() {
+  const { subPage, navigate } = useVariantNav();
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {

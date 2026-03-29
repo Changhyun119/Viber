@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useVariantNav } from "../landing-variant-switcher";
 import {
   Flame,
   Triangle,
@@ -94,11 +95,11 @@ const MEDAL_COLORS = [
 
 /* ── nav ── */
 const V2_NAV = [
-  { href: "/", label: "Home" },
-  { href: "/products", label: "Products" },
-  { href: "/trending", label: "Trending", active: true },
-  { href: "/new", label: "New" },
-  { href: "/feedback", label: "Feedback" },
+  { page: "home" as const, label: "Home" },
+  { page: "products" as const, label: "Products" },
+  { page: "trending" as const, label: "Trending" },
+  { page: "new" as const, label: "New" },
+  { page: "feedback" as const, label: "Feedback" },
 ];
 
 function CategoryBadge({ category }: { category: string }) {
@@ -116,6 +117,7 @@ function CategoryBadge({ category }: { category: string }) {
 /* ══════════════════════════════════════════ */
 
 export function FeatureTrending() {
+  const { subPage, navigate } = useVariantNav();
   const [period, setPeriod] = useState("week");
 
   const heroAnim = useScrollAnimation(0.1);
@@ -132,24 +134,27 @@ export function FeatureTrending() {
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 border-b border-neutral-200 bg-[#FFFDF8]/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
+          <button onClick={() => navigate("home")} className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
             🚀 Viber
-          </Link>
+          </button>
           <nav className="flex items-center gap-1">
-            {V2_NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
-                  item.active
-                    ? "text-white"
-                    : "text-neutral-600 hover:bg-neutral-100"
-                }`}
-                style={item.active ? { backgroundColor: ACCENT } : undefined}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {V2_NAV.map((item) => {
+              const isActive = subPage === item.page;
+              return (
+                <button
+                  key={item.page}
+                  onClick={() => navigate(item.page)}
+                  className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
+                    isActive
+                      ? "text-white"
+                      : "text-neutral-600 hover:bg-neutral-100"
+                  }`}
+                  style={isActive ? { backgroundColor: ACCENT } : undefined}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
           </nav>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
