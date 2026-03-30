@@ -49,6 +49,7 @@ export default async function RootLayout({
           .landing-fullpage { margin-top: -56px; }
           body:has(.landing-fullpage) > div > div > header,
           body:has(.landing-fullpage) > div > div > footer { display: none !important; }
+          body:has(.landing-fullpage) { background: none !important; }
         ` }} />
       </body>
     </html>

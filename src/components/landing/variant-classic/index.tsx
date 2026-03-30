@@ -4,6 +4,7 @@ import { ArrowRight, MessageSquareText, BookMarked, Sparkles, Search, Home, Pack
 
 import { HeroBackground } from "@/components/ui/hero-background";
 import { RotatingText } from "../rotating-text";
+import { GeoFaqSection } from "../geo-faq-section";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { LandingVariantProps, SerializedProjectCard } from "../types";
 import {
@@ -126,6 +127,9 @@ export function VariantClassic({ data, viewer }: LandingVariantProps) {
           </div>
         </section>
       )}
+
+      {/* FAQ — GEO 최적화 */}
+      <GeoFaqSection data={data} />
 
       <CTASection />
     </div>
