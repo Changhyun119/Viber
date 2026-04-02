@@ -198,7 +198,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* V2 header */}
-      <header className="sticky top-[38px] z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4 sm:px-6">
           <button onClick={() => navigate("home")} className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
             🚀 Viber
@@ -218,6 +218,9 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
                 {item.label}
               </button>
             ))}
+            <Link href="/submit" className="rounded-full px-3.5 py-1.5 text-sm font-semibold text-white transition hover:opacity-90" style={{ backgroundColor: ACCENT }}>
+              등록하기
+            </Link>
           </nav>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
@@ -281,7 +284,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
               ✨ 프로젝트 등록하기 (무료)
             </Link>
             <Link
-              href="/projects"
+              href="/feature/products"
               className="inline-flex items-center gap-2 rounded-full border border-neutral-700 px-6 py-3 text-sm font-semibold text-white transition hover:border-neutral-500"
             >
               프로젝트 탐험하기
@@ -460,7 +463,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
                 ✨ 프로젝트 등록하기 (무료)
               </Link>
               <Link
-                href="/projects"
+                href="/feature/products"
                 className="inline-flex items-center gap-2 rounded-full border border-neutral-700 px-6 py-3 text-sm font-semibold text-white transition hover:border-neutral-500"
               >
                 등록 가이드 보기

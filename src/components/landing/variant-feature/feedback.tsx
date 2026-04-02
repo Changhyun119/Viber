@@ -15,7 +15,7 @@ import {
 
 /* ── palette ── */
 const ACCENT = "#d76542";
-const ACCENT_LIGHT = "#fdf2ee";
+
 
 /* ── scroll animation hook ── */
 function useScrollAnimation(threshold = 0.15) {
@@ -105,6 +105,8 @@ export function FeatureFeedback() {
 
   const heroAnim = useScrollAnimation(0.1);
   const cardsAnim = useScrollAnimation();
+  const howAnim = useScrollAnimation();
+  const ctaAnim = useScrollAnimation();
 
   /* filter projects that have feedback questions + search */
   const feedbackProjects = DUMMY_PROJECTS.filter((p) => {
@@ -118,9 +120,9 @@ export function FeatureFeedback() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#1a1a1a]">
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 border-b border-neutral-200 bg-[#FFFDF8]/90 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4 sm:px-6">
           <button onClick={() => navigate("home")} className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
             🚀 Viber
@@ -135,7 +137,7 @@ export function FeatureFeedback() {
                   className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
                     isActive
                       ? "text-white"
-                      : "text-neutral-600 hover:bg-neutral-100"
+                      : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
                   }`}
                   style={isActive ? { backgroundColor: ACCENT } : undefined}
                 >
@@ -143,10 +145,12 @@ export function FeatureFeedback() {
                 </button>
               );
             })}
+            <Link href="/submit" className="rounded-full px-3.5 py-1.5 text-sm font-semibold text-white transition hover:opacity-90" style={{ backgroundColor: ACCENT }}>
+              등록하기
+            </Link>
           </nav>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
-            <span className="text-lg cursor-pointer">☀️</span>
             <Link href="/auth/sign-in" className="rounded-full px-4 py-2 text-sm font-semibold text-white" style={{ backgroundColor: ACCENT }}>
               로그인
             </Link>
@@ -155,34 +159,36 @@ export function FeatureFeedback() {
       </header>
 
       {/* ── Gradient Hero ── */}
-      <section className="relative overflow-hidden px-4 pb-10 pt-12 text-center sm:pb-14 sm:pt-16">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#fef3ec] to-[#FFFDF8]" />
+      <section className="relative overflow-hidden bg-[#0A0A0A] px-4 pb-10 pt-12 text-center sm:pb-14 sm:pt-16">
         <div
           ref={heroAnim.ref}
           className={`relative mx-auto max-w-3xl transition-all duration-700 ${
             heroAnim.isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
+          <h1 className="text-6xl font-extrabold tracking-tight sm:text-7xl lg:text-8xl">
+            Viber
+          </h1>
           <span
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold"
-            style={{ backgroundColor: ACCENT_LIGHT, color: ACCENT }}
+            className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-neutral-800 px-4 py-1.5 text-xs font-semibold"
+            style={{ color: ACCENT }}
           >
             <MessageSquare className="h-3.5 w-3.5" /> 피드백 요청
           </span>
-          <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
             당신의 <span style={{ color: ACCENT }}>피드백</span>이 필요해요
-          </h1>
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-neutral-500 sm:text-base">
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-neutral-400 sm:text-base">
             제작자들이 여러분의 의견을 기다리고 있습니다. 직접 사용해보고 솔직한 피드백을 남겨주세요.
           </p>
 
           {/* search */}
-          <div className="mx-auto mt-8 flex max-w-md items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2.5 shadow-sm">
+          <div className="mx-auto mt-8 flex max-w-md items-center gap-2 rounded-full border border-neutral-700 bg-neutral-900 px-4 py-2.5">
             <Search className="h-4 w-4 text-neutral-400" />
             <input
               type="text"
               placeholder="프로젝트 또는 피드백 질문 검색..."
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-400"
+              className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-neutral-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -195,8 +201,13 @@ export function FeatureFeedback() {
       </section>
 
       {/* ── Feedback Cards ── */}
-      <section className="bg-white px-4 py-16 sm:px-6">
-        <div className="mx-auto max-w-5xl">
+      <section className="bg-[#111111] px-4 py-16 sm:px-6">
+        <div
+          ref={cardsAnim.ref}
+          className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
+            cardsAnim.isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+        >
           {feedbackProjects.length === 0 ? (
             <div className="py-20 text-center">
               <p className="text-lg font-semibold text-neutral-400">검색 결과가 없습니다</p>
@@ -207,12 +218,12 @@ export function FeatureFeedback() {
               {feedbackProjects.map((p, i) => (
                 <div
                   key={i}
-                  className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-2 hover:shadow-lg"
+                  className="group overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/50 transition hover:-translate-y-2 hover:border-neutral-600"
                 >
                   {/* card header */}
                   <div className="p-5">
                     <div className="flex items-start gap-3">
-                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neutral-50 text-2xl">
+                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neutral-800 text-2xl">
                         {p.icon}
                       </span>
                       <div className="min-w-0 flex-1">
@@ -220,13 +231,13 @@ export function FeatureFeedback() {
                           <h3 className="truncate text-base font-bold">{p.title}</h3>
                           <CategoryBadge category={p.category} />
                         </div>
-                        <p className="mt-1 line-clamp-2 text-xs leading-5 text-neutral-500">
+                        <p className="mt-1 line-clamp-2 text-xs leading-5 text-neutral-400">
                           {p.tagline}
                         </p>
                       </div>
                     </div>
 
-                    <div className="mt-4 flex items-center gap-4 text-xs text-neutral-500">
+                    <div className="mt-4 flex items-center gap-4 text-xs text-neutral-400">
                       <span className="inline-flex items-center gap-1">
                         <MousePointerClick className="h-3 w-3" style={{ color: ACCENT }} />
                         {p.tries.toLocaleString()}
@@ -237,16 +248,16 @@ export function FeatureFeedback() {
                       </span>
                       <span className="inline-flex items-center gap-0.5">
                         <Star className="h-3 w-3" fill="#FBBF24" stroke="#FBBF24" strokeWidth={1.5} />
-                        <span className="font-semibold text-neutral-600">{p.score}</span>
+                        <span className="font-semibold text-neutral-400">{p.score}</span>
                       </span>
                     </div>
                   </div>
 
                   {/* feedback question area */}
-                  <div className="border-t border-neutral-100 bg-neutral-50/50 p-5">
+                  <div className="border-t border-neutral-800 bg-neutral-800/50 p-5">
                     <div className="flex items-start gap-2">
                       <MessageSquare className="mt-0.5 h-4 w-4 shrink-0" style={{ color: ACCENT }} />
-                      <p className="text-sm italic leading-5 text-neutral-600">
+                      <p className="text-sm italic leading-5 text-neutral-400">
                         &ldquo;{p.feedbackQuestion}&rdquo;
                       </p>
                     </div>
@@ -267,8 +278,13 @@ export function FeatureFeedback() {
       </section>
 
       {/* ── How it works ── */}
-      <section className="bg-[#FFFDF8] px-4 py-16 sm:px-6">
-        <div className="mx-auto max-w-5xl">
+      <section className="bg-[#0A0A0A] px-4 py-16 sm:px-6">
+        <div
+          ref={howAnim.ref}
+          className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
+            howAnim.isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+        >
           <h2 className="text-center text-2xl font-bold tracking-tight sm:text-3xl">
             피드백은 이렇게 작동해요
           </h2>
@@ -280,7 +296,7 @@ export function FeatureFeedback() {
             ].map((s) => (
               <div
                 key={s.step}
-                className="rounded-2xl border border-neutral-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6 text-center transition hover:-translate-y-1 hover:border-neutral-600"
               >
                 <div
                   className="mx-auto flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold text-white"
@@ -289,7 +305,7 @@ export function FeatureFeedback() {
                   {s.step}
                 </div>
                 <h3 className="mt-4 text-base font-bold">{s.title}</h3>
-                <p className="mt-2 text-sm leading-5 text-neutral-500">{s.desc}</p>
+                <p className="mt-2 text-sm leading-5 text-neutral-400">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -297,15 +313,20 @@ export function FeatureFeedback() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-white px-4 py-16 sm:px-6">
-        <div className="mx-auto max-w-5xl">
-          <div className="rounded-3xl border border-neutral-200 bg-[#FFFDF8] px-6 py-16 text-center shadow-sm sm:px-12">
+      <section className="bg-[#111111] px-4 py-16 sm:px-6">
+        <div
+          ref={ctaAnim.ref}
+          className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
+            ctaAnim.isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+        >
+          <div className="rounded-3xl border border-neutral-800 bg-[#0A0A0A] px-6 py-16 text-center sm:px-12">
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
               피드백이 필요한 프로젝트가 있나요?
               <br />
               <span style={{ color: ACCENT }}>지금 등록하세요</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-500">
+            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-400">
               피드백 질문을 설정하면 커뮤니티의 솔직한 의견을 받을 수 있습니다.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -322,7 +343,7 @@ export function FeatureFeedback() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-neutral-200 bg-[#FFFDF8] px-4 py-12 sm:px-6">
+      <footer className="border-t border-neutral-800 bg-[#0A0A0A] px-4 py-12 sm:px-6">
         <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-4">
           <div>
             <p className="flex items-center gap-1.5 text-lg font-bold">
@@ -334,9 +355,9 @@ export function FeatureFeedback() {
               만든 것을 세상에 보여주세요.
             </p>
             <div className="mt-4 flex items-center gap-3">
-              <Github className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-neutral-700" />
-              <Twitter className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-neutral-700" />
-              <span className="cursor-pointer text-sm text-neutral-400 transition hover:text-neutral-700">💬</span>
+              <Github className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-white" />
+              <Twitter className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-white" />
+              <span className="cursor-pointer text-sm text-neutral-400 transition hover:text-white">💬</span>
             </div>
           </div>
           <div>
@@ -348,7 +369,7 @@ export function FeatureFeedback() {
                 { label: "Categories", href: "/products" },
                 { label: "Tags", href: "/products" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
@@ -363,7 +384,7 @@ export function FeatureFeedback() {
                 { label: "등록 가이드", href: "/guide" },
                 { label: "FAQ", href: "/faq" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
@@ -378,16 +399,16 @@ export function FeatureFeedback() {
                 { label: "Privacy", href: "/privacy" },
                 { label: "Discord", href: "#" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
             </div>
           </div>
         </div>
-        <div className="mx-auto mt-10 flex max-w-5xl items-center justify-between border-t border-neutral-100 pt-6">
-          <span className="text-xs text-neutral-400">&copy; 2026 Viber. All rights reserved.</span>
-          <span className="text-xs text-neutral-400">Made with ❤️ by the Vibe Coding Community</span>
+        <div className="mx-auto mt-10 flex max-w-5xl items-center justify-between border-t border-neutral-800 pt-6">
+          <span className="text-xs text-neutral-500">&copy; 2026 Viber. All rights reserved.</span>
+          <span className="text-xs text-neutral-500">Made with ❤️ by the Vibe Coding Community</span>
         </div>
       </footer>
     </div>

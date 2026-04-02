@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   Search,
   ChevronUp,
-  Moon,
   ArrowRight,
 } from "lucide-react";
 import { useVariantNav } from "../landing-variant-switcher";
@@ -61,6 +60,9 @@ function AnimateIn({
     </div>
   );
 }
+
+/* ── accent ── */
+const ACCENT = "#d76542";
 
 /* ── nav ── */
 const V3_NAV = [
@@ -151,7 +153,9 @@ export function MinimalProducts() {
               </button>
             ))}
           </nav>
-          <Moon className="h-4 w-4 cursor-pointer text-neutral-500 hover:text-white" />
+          <Link href="/submit" className="text-sm font-medium text-white transition hover:opacity-80" style={{ color: ACCENT }}>
+            등록하기
+          </Link>
         </div>
       </header>
 
@@ -176,7 +180,7 @@ export function MinimalProducts() {
                 placeholder="프로젝트 검색..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-xl border border-neutral-800 bg-neutral-800 py-3 pl-11 pr-4 text-sm text-white placeholder-neutral-500 outline-none transition focus:border-neutral-600 focus:ring-0"
+                className="w-full rounded-xl border border-neutral-700 bg-neutral-900 py-3 pl-11 pr-4 text-sm text-white placeholder-neutral-500 outline-none transition focus:border-neutral-600 focus:ring-0"
               />
             </div>
           </AnimateIn>
@@ -213,7 +217,7 @@ export function MinimalProducts() {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((p, i) => (
                 <AnimateIn key={p.id} delay={i * 50}>
-                  <div className="group rounded-xl border border-neutral-800 bg-neutral-900 p-5 transition hover:border-neutral-600">
+                  <div className="group rounded-xl border border-neutral-800 bg-neutral-900/50 p-5 transition hover:border-neutral-600">
                     <div className="flex items-center gap-3">
                       <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-800 text-lg">
                         {p.icon}
@@ -255,17 +259,17 @@ export function MinimalProducts() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-neutral-800 bg-[#0A0A0A] px-6 py-8">
+      <footer className="border-t border-neutral-800 bg-[#111111] px-6 py-8">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <span className="text-xs text-neutral-600">&copy; 2026 Viber</span>
+          <span className="text-xs text-neutral-500">&copy; 2026 Viber</span>
           <div className="flex gap-6">
-            <Link href="/about" className="text-xs text-neutral-500 hover:text-white">
+            <Link href="/about" className="text-xs text-neutral-400 hover:text-white">
               About
             </Link>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-xs text-neutral-500 hover:text-white">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-xs text-neutral-400 hover:text-white">
               GitHub
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-xs text-neutral-500 hover:text-white">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-xs text-neutral-400 hover:text-white">
               Twitter
             </a>
           </div>

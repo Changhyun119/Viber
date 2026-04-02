@@ -210,6 +210,13 @@ export function VariantMinimal({ data, viewer }: LandingVariantProps) {
                 {item.label}
               </button>
             ))}
+            <Link
+              href="/submit"
+              className="text-sm font-medium transition hover:opacity-80"
+              style={{ color: ACCENT }}
+            >
+              등록하기
+            </Link>
           </nav>
         </div>
       </header>

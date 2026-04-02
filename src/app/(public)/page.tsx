@@ -46,7 +46,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           data={serializeHomepageData(data)}
           viewer={viewer}
           savedProjectIds={viewerState.savedProjectIds}
-          activeVariant="classic"
+          activeVariant="feature"
           activeSubPage="home"
         />
       </Suspense>

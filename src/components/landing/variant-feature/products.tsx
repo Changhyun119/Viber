@@ -16,7 +16,7 @@ import {
 
 /* ── palette ── */
 const ACCENT = "#d76542";
-const ACCENT_LIGHT = "#fdf2ee";
+
 
 /* ── scroll animation hook ── */
 function useScrollAnimation(threshold = 0.15) {
@@ -125,7 +125,7 @@ function StarRating({ score }: { score: number }) {
           strokeWidth={1.5}
         />
       ))}
-      <span className="ml-1 text-xs font-semibold text-neutral-600">{score}</span>
+      <span className="ml-1 text-xs font-semibold text-neutral-400">{score}</span>
     </span>
   );
 }
@@ -152,9 +152,9 @@ export function FeatureProducts() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#1a1a1a]">
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 border-b border-neutral-200 bg-[#FFFDF8]/90 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4 sm:px-6">
           <button onClick={() => navigate("home")} className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
             🚀 Viber
@@ -169,7 +169,7 @@ export function FeatureProducts() {
                   className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
                     isActive
                       ? "text-white"
-                      : "text-neutral-600 hover:bg-neutral-100"
+                      : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
                   }`}
                   style={isActive ? { backgroundColor: ACCENT } : undefined}
                 >
@@ -177,10 +177,12 @@ export function FeatureProducts() {
                 </button>
               );
             })}
+            <Link href="/submit" className="rounded-full px-3.5 py-1.5 text-sm font-semibold text-white transition hover:opacity-90" style={{ backgroundColor: ACCENT }}>
+              등록하기
+            </Link>
           </nav>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
-            <span className="text-lg cursor-pointer">☀️</span>
             <Link href="/auth/sign-in" className="rounded-full px-4 py-2 text-sm font-semibold text-white" style={{ backgroundColor: ACCENT }}>
               로그인
             </Link>
@@ -189,8 +191,7 @@ export function FeatureProducts() {
       </header>
 
       {/* ── Gradient Hero ── */}
-      <section className="relative overflow-hidden px-4 pb-10 pt-12 text-center sm:pb-14 sm:pt-16">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#fef3ec] to-[#FFFDF8]" />
+      <section className="relative overflow-hidden bg-[#0A0A0A] px-4 pb-10 pt-12 text-center sm:pb-14 sm:pt-16">
         <div
           ref={heroAnim.ref}
           className={`relative mx-auto max-w-3xl transition-all duration-700 ${
@@ -198,25 +199,25 @@ export function FeatureProducts() {
           }`}
         >
           <span
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold"
-            style={{ backgroundColor: ACCENT_LIGHT, color: ACCENT }}
+            className="inline-flex items-center gap-1.5 rounded-full bg-neutral-800 px-4 py-1.5 text-xs font-semibold"
+            style={{ color: ACCENT }}
           >
             🔍 프로젝트 탐색
           </span>
           <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
             모든 <span style={{ color: ACCENT }}>프로젝트</span>를 탐색하세요
           </h1>
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-neutral-500 sm:text-base">
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-neutral-400 sm:text-base">
             바이브코딩 커뮤니티의 {DUMMY_PROJECTS.length}개 프로젝트를 카테고리별로 찾아보세요.
           </p>
 
           {/* search */}
-          <div className="mx-auto mt-8 flex max-w-md items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2.5 shadow-sm">
+          <div className="mx-auto mt-8 flex max-w-md items-center gap-2 rounded-full border border-neutral-700 bg-neutral-900 px-4 py-2.5">
             <Search className="h-4 w-4 text-neutral-400" />
             <input
               type="text"
               placeholder="프로젝트 이름 또는 키워드 검색..."
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-400"
+              className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-neutral-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -231,7 +232,7 @@ export function FeatureProducts() {
                 className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition ${
                   catTab === tab.key
                     ? "text-white shadow-sm"
-                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                    : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-white"
                 }`}
                 style={catTab === tab.key ? { backgroundColor: ACCENT } : undefined}
               >
@@ -248,7 +249,7 @@ export function FeatureProducts() {
       </section>
 
       {/* ── Project Grid ── */}
-      <section className="bg-white px-4 py-16 sm:px-6">
+      <section className="bg-[#111111] px-4 py-16 sm:px-6">
         <div
           ref={gridAnim.ref}
           className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
@@ -265,10 +266,10 @@ export function FeatureProducts() {
               {filtered.map((p, i) => (
                 <div
                   key={i}
-                  className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition hover:-translate-y-2 hover:shadow-lg"
+                  className="group overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5 transition hover:-translate-y-2 hover:border-neutral-600"
                 >
                   <div className="flex items-start gap-3">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-50 text-2xl">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-800 text-2xl">
                       {p.icon}
                     </span>
                     <div className="flex-1 min-w-0">
@@ -276,7 +277,7 @@ export function FeatureProducts() {
                         <h3 className="truncate text-base font-bold">{p.title}</h3>
                         <CategoryBadge category={p.category} />
                       </div>
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-neutral-500">
+                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-neutral-400">
                         {p.tagline}
                       </p>
                     </div>
@@ -286,8 +287,8 @@ export function FeatureProducts() {
                     <StarRating score={p.score} />
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3">
-                    <div className="flex items-center gap-4 text-xs text-neutral-500">
+                  <div className="mt-4 flex items-center justify-between border-t border-neutral-800 pt-3">
+                    <div className="flex items-center gap-4 text-xs text-neutral-400">
                       <span className="inline-flex items-center gap-1">
                         <MousePointerClick className="h-3 w-3" style={{ color: ACCENT }} />
                         {p.tries.toLocaleString()}
@@ -312,15 +313,15 @@ export function FeatureProducts() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-[#FFFDF8] px-4 py-16 sm:px-6">
+      <section className="bg-[#111111] px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
-          <div className="rounded-3xl border border-neutral-200 bg-white px-6 py-16 text-center shadow-sm sm:px-12">
+          <div className="rounded-3xl border border-neutral-800 bg-[#0A0A0A] px-6 py-16 text-center sm:px-12">
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
               찾는 프로젝트가 없나요?
               <br />
               <span style={{ color: ACCENT }}>직접 등록하세요</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-500">
+            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-400">
               등록 무료, 실사용자 피드백 획득, 롱테일 트래픽까지.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -337,7 +338,7 @@ export function FeatureProducts() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-neutral-200 bg-[#FFFDF8] px-4 py-12 sm:px-6">
+      <footer className="border-t border-neutral-800 bg-[#0A0A0A] px-4 py-12 sm:px-6">
         <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-4">
           <div>
             <p className="flex items-center gap-1.5 text-lg font-bold">
@@ -349,9 +350,9 @@ export function FeatureProducts() {
               만든 것을 세상에 보여주세요.
             </p>
             <div className="mt-4 flex items-center gap-3">
-              <Github className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-neutral-700" />
-              <Twitter className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-neutral-700" />
-              <span className="cursor-pointer text-sm text-neutral-400 transition hover:text-neutral-700">💬</span>
+              <Github className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-white" />
+              <Twitter className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-white" />
+              <span className="cursor-pointer text-sm text-neutral-400 transition hover:text-white">💬</span>
             </div>
           </div>
           <div>
@@ -363,7 +364,7 @@ export function FeatureProducts() {
                 { label: "Categories", href: "/products" },
                 { label: "Tags", href: "/products" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
@@ -378,7 +379,7 @@ export function FeatureProducts() {
                 { label: "등록 가이드", href: "/guide" },
                 { label: "FAQ", href: "/faq" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
@@ -393,16 +394,16 @@ export function FeatureProducts() {
                 { label: "Privacy", href: "/privacy" },
                 { label: "Discord", href: "#" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
             </div>
           </div>
         </div>
-        <div className="mx-auto mt-10 flex max-w-5xl items-center justify-between border-t border-neutral-100 pt-6">
-          <span className="text-xs text-neutral-400">&copy; 2026 Viber. All rights reserved.</span>
-          <span className="text-xs text-neutral-400">Made with ❤️ by the Vibe Coding Community</span>
+        <div className="mx-auto mt-10 flex max-w-5xl items-center justify-between border-t border-neutral-800 pt-6">
+          <span className="text-xs text-neutral-500">&copy; 2026 Viber. All rights reserved.</span>
+          <span className="text-xs text-neutral-500">Made with ❤️ by the Vibe Coding Community</span>
         </div>
       </footer>
     </div>

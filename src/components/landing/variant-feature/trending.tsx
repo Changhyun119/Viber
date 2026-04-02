@@ -17,7 +17,7 @@ import {
 
 /* ── palette ── */
 const ACCENT = "#d76542";
-const ACCENT_LIGHT = "#fdf2ee";
+
 
 /* ── scroll animation hook ── */
 function useScrollAnimation(threshold = 0.15) {
@@ -88,9 +88,9 @@ const PERIOD_TABS = [
 
 /* ── medal colors ── */
 const MEDAL_COLORS = [
-  { bg: "from-amber-50 to-yellow-50", border: "border-amber-200", badge: "#D97706", label: "🥇 1st" },
-  { bg: "from-slate-50 to-gray-50", border: "border-slate-300", badge: "#64748B", label: "🥈 2nd" },
-  { bg: "from-orange-50 to-amber-50", border: "border-orange-200", badge: "#B45309", label: "🥉 3rd" },
+  { bg: "", border: "border-neutral-700", badge: "#D97706", label: "🥇 1st" },
+  { bg: "", border: "border-neutral-700", badge: "#64748B", label: "🥈 2nd" },
+  { bg: "", border: "border-neutral-700", badge: "#B45309", label: "🥉 3rd" },
 ];
 
 /* ── nav ── */
@@ -130,9 +130,9 @@ export function FeatureTrending() {
   const rest = sorted.slice(3);
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#1a1a1a]">
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 border-b border-neutral-200 bg-[#FFFDF8]/90 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4 sm:px-6">
           <button onClick={() => navigate("home")} className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
             🚀 Viber
@@ -147,7 +147,7 @@ export function FeatureTrending() {
                   className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
                     isActive
                       ? "text-white"
-                      : "text-neutral-600 hover:bg-neutral-100"
+                      : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
                   }`}
                   style={isActive ? { backgroundColor: ACCENT } : undefined}
                 >
@@ -155,10 +155,12 @@ export function FeatureTrending() {
                 </button>
               );
             })}
+            <Link href="/submit" className="rounded-full px-3.5 py-1.5 text-sm font-semibold text-white transition hover:opacity-90" style={{ backgroundColor: ACCENT }}>
+              등록하기
+            </Link>
           </nav>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
-            <span className="text-lg cursor-pointer">☀️</span>
             <Link href="/auth/sign-in" className="rounded-full px-4 py-2 text-sm font-semibold text-white" style={{ backgroundColor: ACCENT }}>
               로그인
             </Link>
@@ -167,8 +169,7 @@ export function FeatureTrending() {
       </header>
 
       {/* ── Gradient Hero ── */}
-      <section className="relative overflow-hidden px-4 pb-10 pt-12 text-center sm:pb-14 sm:pt-16">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#fef3ec] to-[#FFFDF8]" />
+      <section className="relative overflow-hidden bg-[#0A0A0A] px-4 pb-10 pt-12 text-center sm:pb-14 sm:pt-16">
         <div
           ref={heroAnim.ref}
           className={`relative mx-auto max-w-3xl transition-all duration-700 ${
@@ -176,15 +177,15 @@ export function FeatureTrending() {
           }`}
         >
           <span
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold"
-            style={{ backgroundColor: ACCENT_LIGHT, color: ACCENT }}
+            className="inline-flex items-center gap-1.5 rounded-full bg-neutral-800 px-4 py-1.5 text-xs font-semibold"
+            style={{ color: ACCENT }}
           >
             <Flame className="h-3.5 w-3.5" /> 트렌딩
           </span>
           <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
             지금 <span style={{ color: ACCENT }}>뜨고 있는</span> 프로젝트
           </h1>
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-neutral-500 sm:text-base">
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-neutral-400 sm:text-base">
             커뮤니티에서 가장 많은 관심을 받고 있는 프로젝트를 확인하세요.
           </p>
 
@@ -197,7 +198,7 @@ export function FeatureTrending() {
                 className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
                   period === tab.key
                     ? "text-white shadow-sm"
-                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                    : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-white"
                 }`}
                 style={period === tab.key ? { backgroundColor: ACCENT } : undefined}
               >
@@ -209,7 +210,7 @@ export function FeatureTrending() {
       </section>
 
       {/* ── Top 3 Podium ── */}
-      <section className="bg-white px-4 py-16 sm:px-6">
+      <section className="bg-[#111111] px-4 py-16 sm:px-6">
         <div
           ref={topAnim.ref}
           className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
@@ -227,7 +228,7 @@ export function FeatureTrending() {
               return (
                 <div
                   key={i}
-                  className={`relative overflow-hidden rounded-2xl border ${medal.border} bg-gradient-to-br ${medal.bg} p-6 shadow-sm transition hover:-translate-y-2 hover:shadow-lg`}
+                  className={`relative overflow-hidden rounded-2xl border ${medal.border} bg-neutral-900/50 p-6 transition hover:-translate-y-2 hover:border-neutral-600`}
                 >
                   {/* rank badge */}
                   <span
@@ -237,7 +238,7 @@ export function FeatureTrending() {
                     {medal.label}
                   </span>
 
-                  <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-white text-3xl shadow-sm">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-neutral-800 text-3xl">
                     {p.icon}
                   </span>
 
@@ -246,7 +247,7 @@ export function FeatureTrending() {
                       <h3 className="text-lg font-bold">{p.title}</h3>
                       <CategoryBadge category={p.category} />
                     </div>
-                    <p className="mt-2 line-clamp-2 text-sm leading-5 text-neutral-500">
+                    <p className="mt-2 line-clamp-2 text-sm leading-5 text-neutral-400">
                       {p.tagline}
                     </p>
                   </div>
@@ -261,10 +262,10 @@ export function FeatureTrending() {
                         strokeWidth={1.5}
                       />
                     ))}
-                    <span className="ml-1 text-sm font-semibold text-neutral-600">{p.score}</span>
+                    <span className="ml-1 text-sm font-semibold text-neutral-400">{p.score}</span>
                   </div>
 
-                  <div className="mt-5 flex items-center gap-5 text-sm text-neutral-500">
+                  <div className="mt-5 flex items-center gap-5 text-sm text-neutral-400">
                     <span className="inline-flex items-center gap-1">
                       <MousePointerClick className="h-3.5 w-3.5" style={{ color: ACCENT }} />
                       {p.tries.toLocaleString()} Tries
@@ -291,7 +292,7 @@ export function FeatureTrending() {
       </section>
 
       {/* ── Ranking List ── */}
-      <section className="bg-[#FFFDF8] px-4 py-16 sm:px-6">
+      <section className="bg-[#0A0A0A] px-4 py-16 sm:px-6">
         <div
           ref={listAnim.ref}
           className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
@@ -303,19 +304,19 @@ export function FeatureTrending() {
             전체 랭킹
           </h2>
 
-          <div className="mt-8 divide-y divide-neutral-100 overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+          <div className="mt-8 divide-y divide-neutral-800 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/50">
             {rest.map((p, i) => (
               <div
                 key={i}
-                className="flex items-center gap-4 px-5 py-4 transition hover:bg-neutral-50"
+                className="flex items-center gap-4 px-5 py-4 transition hover:bg-neutral-800/50"
               >
                 {/* rank */}
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-sm font-bold text-neutral-500">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-800 text-sm font-bold text-neutral-400">
                   {i + 4}
                 </span>
 
                 {/* icon */}
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-neutral-50 text-xl">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-neutral-800 text-xl">
                   {p.icon}
                 </span>
 
@@ -325,13 +326,13 @@ export function FeatureTrending() {
                     <h3 className="truncate text-sm font-bold">{p.title}</h3>
                     <CategoryBadge category={p.category} />
                   </div>
-                  <p className="mt-0.5 truncate text-xs text-neutral-500">
+                  <p className="mt-0.5 truncate text-xs text-neutral-400">
                     {p.tagline}
                   </p>
                 </div>
 
                 {/* stats */}
-                <div className="hidden items-center gap-4 text-xs text-neutral-500 sm:flex">
+                <div className="hidden items-center gap-4 text-xs text-neutral-400 sm:flex">
                   <span className="inline-flex items-center gap-1">
                     <MousePointerClick className="h-3 w-3" style={{ color: ACCENT }} />
                     {p.tries.toLocaleString()}
@@ -345,7 +346,7 @@ export function FeatureTrending() {
                 {/* score */}
                 <div className="hidden items-center gap-1 sm:flex">
                   <Star className="h-3.5 w-3.5" fill="#FBBF24" stroke="#FBBF24" strokeWidth={1.5} />
-                  <span className="text-xs font-semibold text-neutral-600">{p.score}</span>
+                  <span className="text-xs font-semibold text-neutral-400">{p.score}</span>
                 </div>
 
                 {/* CTA */}
@@ -362,7 +363,7 @@ export function FeatureTrending() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-neutral-200 bg-[#FFFDF8] px-4 py-12 sm:px-6">
+      <footer className="border-t border-neutral-800 bg-[#0A0A0A] px-4 py-12 sm:px-6">
         <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-4">
           <div>
             <p className="flex items-center gap-1.5 text-lg font-bold">
@@ -374,9 +375,9 @@ export function FeatureTrending() {
               만든 것을 세상에 보여주세요.
             </p>
             <div className="mt-4 flex items-center gap-3">
-              <Github className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-neutral-700" />
-              <Twitter className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-neutral-700" />
-              <span className="cursor-pointer text-sm text-neutral-400 transition hover:text-neutral-700">💬</span>
+              <Github className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-white" />
+              <Twitter className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-white" />
+              <span className="cursor-pointer text-sm text-neutral-400 transition hover:text-white">💬</span>
             </div>
           </div>
           <div>
@@ -388,7 +389,7 @@ export function FeatureTrending() {
                 { label: "Categories", href: "/products" },
                 { label: "Tags", href: "/products" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
@@ -403,7 +404,7 @@ export function FeatureTrending() {
                 { label: "등록 가이드", href: "/guide" },
                 { label: "FAQ", href: "/faq" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
@@ -418,16 +419,16 @@ export function FeatureTrending() {
                 { label: "Privacy", href: "/privacy" },
                 { label: "Discord", href: "#" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
             </div>
           </div>
         </div>
-        <div className="mx-auto mt-10 flex max-w-5xl items-center justify-between border-t border-neutral-100 pt-6">
-          <span className="text-xs text-neutral-400">&copy; 2026 Viber. All rights reserved.</span>
-          <span className="text-xs text-neutral-400">Made with ❤️ by the Vibe Coding Community</span>
+        <div className="mx-auto mt-10 flex max-w-5xl items-center justify-between border-t border-neutral-800 pt-6">
+          <span className="text-xs text-neutral-500">&copy; 2026 Viber. All rights reserved.</span>
+          <span className="text-xs text-neutral-500">Made with ❤️ by the Vibe Coding Community</span>
         </div>
       </footer>
     </div>

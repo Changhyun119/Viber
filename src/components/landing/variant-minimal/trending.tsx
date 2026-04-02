@@ -4,7 +4,6 @@ import { useRef, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
   ChevronUp,
-  Moon,
 } from "lucide-react";
 import { useVariantNav } from "../landing-variant-switcher";
 
@@ -59,6 +58,9 @@ function AnimateIn({
     </div>
   );
 }
+
+/* ── accent ── */
+const ACCENT = "#d76542";
 
 /* ── nav ── */
 const V3_NAV = [
@@ -130,7 +132,9 @@ export function MinimalTrending() {
               </button>
             ))}
           </nav>
-          <Moon className="h-4 w-4 cursor-pointer text-neutral-500 hover:text-white" />
+          <Link href="/submit" className="text-sm font-medium text-white transition hover:opacity-80" style={{ color: ACCENT }}>
+            등록하기
+          </Link>
         </div>
       </header>
 
@@ -203,17 +207,17 @@ export function MinimalTrending() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-neutral-800 bg-[#0A0A0A] px-6 py-8">
+      <footer className="border-t border-neutral-800 bg-[#111111] px-6 py-8">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <span className="text-xs text-neutral-600">&copy; 2026 Viber</span>
+          <span className="text-xs text-neutral-500">&copy; 2026 Viber</span>
           <div className="flex gap-6">
-            <Link href="/about" className="text-xs text-neutral-500 hover:text-white">
+            <Link href="/about" className="text-xs text-neutral-400 hover:text-white">
               About
             </Link>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-xs text-neutral-500 hover:text-white">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-xs text-neutral-400 hover:text-white">
               GitHub
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-xs text-neutral-500 hover:text-white">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-xs text-neutral-400 hover:text-white">
               Twitter
             </a>
           </div>
