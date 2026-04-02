@@ -196,9 +196,9 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
   const ctaAnim = useScrollAnimation();
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#1a1a1a]">
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* V2 header */}
-      <header className="sticky top-[38px] z-50 border-b border-neutral-200 bg-[#FFFDF8]/90 backdrop-blur">
+      <header className="sticky top-[38px] z-50 border-b border-neutral-800 bg-[#0A0A0A]/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4 sm:px-6">
           <button onClick={() => navigate("home")} className="flex items-center gap-1.5 text-lg font-bold" style={{ color: ACCENT }}>
             🚀 Viber
@@ -211,7 +211,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
                 className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
                   subPage === item.page
                     ? "text-white"
-                    : "text-neutral-600 hover:bg-neutral-100"
+                    : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
                 }`}
                 style={subPage === item.page ? { backgroundColor: ACCENT } : undefined}
               >
@@ -221,9 +221,8 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
           </nav>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
-            <span className="text-lg cursor-pointer">☀️</span>
             {viewer ? (
-              <span className="rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold" style={{ color: ACCENT }}>{viewer.displayName}</span>
+              <span className="rounded-full bg-neutral-800 px-3 py-1.5 text-sm font-semibold" style={{ color: ACCENT }}>{viewer.displayName}</span>
             ) : (
               <Link href="/auth/sign-in" className="rounded-full px-4 py-2 text-sm font-semibold text-white" style={{ backgroundColor: ACCENT }}>로그인</Link>
             )}
@@ -232,22 +231,18 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
       </header>
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-[#FFFDF8] px-4 pb-12 pt-12 text-center sm:pb-16 sm:pt-16">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#fef3ec] to-[#FFFDF8]" />
+      <section className="relative overflow-hidden bg-[#0A0A0A] px-4 pb-12 pt-16 text-center sm:pb-16 sm:pt-24">
         <div
           ref={heroAnim.ref}
           className={`relative mx-auto max-w-3xl transition-all duration-700 ${
             heroAnim.isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold"
-            style={{ backgroundColor: ACCENT_LIGHT, color: ACCENT }}
-          >
-            🚀 바이브코딩 커뮤니티 쇼케이스
-          </span>
+          <h1 className="text-6xl font-extrabold tracking-tight sm:text-7xl lg:text-8xl">
+            Viber
+          </h1>
 
-          <h1 className="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+          <p className="mt-6 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
             내가 만든{" "}
             <span style={{ color: ACCENT }}>
               {displayText}
@@ -255,22 +250,22 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
             </span>
             <br />
             여기서 시작
-          </h1>
+          </p>
           <style dangerouslySetInnerHTML={{ __html: `
             @keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
             .animate-blink { animation: blink 1s step-end infinite; font-weight: 300; }
           ` }} />
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-neutral-500 sm:text-base">
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-neutral-400 sm:text-base">
             개발자들이 만든 앱, 툴, 서비스를 직접 체험하고 피드백을 남기세요.
           </p>
 
           {/* search */}
-          <div className="mx-auto mt-8 flex max-w-md items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2.5 shadow-sm">
-            <Search className="h-4 w-4 text-neutral-400" />
+          <div className="mx-auto mt-8 flex max-w-md items-center gap-2 rounded-full border border-neutral-700 bg-neutral-900 px-4 py-2.5">
+            <Search className="h-4 w-4 text-neutral-500" />
             <input
               type="text"
               placeholder="프로젝트 이름 또는 키워드 검색..."
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-400"
+              className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-neutral-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -287,7 +282,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
             </Link>
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-300"
+              className="inline-flex items-center gap-2 rounded-full border border-neutral-700 px-6 py-3 text-sm font-semibold text-white transition hover:border-neutral-500"
             >
               프로젝트 탐험하기
             </Link>
@@ -297,17 +292,17 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
           <div className="mt-6 flex items-center justify-center gap-6 text-xs text-neutral-500">
             <span className="inline-flex items-center gap-1">
               <Flame className="h-3.5 w-3.5" style={{ color: ACCENT }} />
-              <strong className="text-neutral-700">1,240</strong> 프로젝트
+              <strong className="text-white">1,240</strong> 프로젝트
             </span>
             <span>
-              <strong className="text-neutral-700">48,800</strong> Try
+              <strong className="text-white">48,800</strong> Try
             </span>
           </div>
         </div>
       </section>
 
       {/* ── Trending ── */}
-      <section className="bg-white px-4 py-16 sm:px-6">
+      <section className="bg-[#111111] px-4 py-16 sm:px-6">
         <div
           ref={trendingAnim.ref}
           className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
@@ -328,7 +323,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
                 className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition ${
                   catTab === tab.key
                     ? "text-white shadow-sm"
-                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                    : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-white"
                 }`}
                 style={catTab === tab.key ? { backgroundColor: ACCENT } : undefined}
               >
@@ -356,7 +351,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
       </section>
 
       {/* ── New Projects ── */}
-      <section className="bg-[#FFFDF8] px-4 py-16 sm:px-6">
+      <section className="bg-[#0A0A0A] px-4 py-16 sm:px-6">
         <div
           ref={newAnim.ref}
           className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
@@ -368,11 +363,11 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
               🆕 New Projects
             </h2>
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600">이번주</span>
+              <span className="rounded-full bg-neutral-800 px-3 py-1 text-xs font-medium text-neutral-400">이번주</span>
             </div>
           </div>
 
-          <div className="mt-8 divide-y divide-neutral-100 overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+          <div className="mt-8 divide-y divide-neutral-800 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/50">
             {hasData
               ? launchProjects.slice(0, 8).map((p) => <NewProjectRow key={p.id} project={p} />)
               : DUMMY_NEW.map((p, i) => <DummyNewRow key={i} rank={i + 1} {...p} />)}
@@ -381,7 +376,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
       </section>
 
       {/* ── Feedback ── */}
-      <section className="bg-white px-4 py-16 sm:px-6">
+      <section className="bg-[#111111] px-4 py-16 sm:px-6">
         <div
           ref={feedbackAnim.ref}
           className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
@@ -391,7 +386,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
           <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
             💬 피드백 요청 중
           </h2>
-          <p className="mt-2 text-sm text-neutral-500">
+          <p className="mt-2 text-sm text-neutral-400">
             제작자가 여러분의 의견을 기다리고 있어요.
           </p>
 
@@ -404,7 +399,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
       </section>
 
       {/* ── Stats ── */}
-      <section className="bg-[#FFFDF8] px-4 py-16 sm:px-6">
+      <section className="bg-[#0A0A0A] px-4 py-16 sm:px-6">
         <div
           ref={statsAnim.ref}
           className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
@@ -419,18 +414,18 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
             ].map((s) => (
               <div
                 key={s.label}
-                className="flex flex-col items-center rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="flex flex-col items-center rounded-2xl border border-neutral-800 bg-neutral-900/50 p-8 text-center transition hover:-translate-y-1 hover:border-neutral-600"
               >
                 <div
                   className="flex h-12 w-12 items-center justify-center rounded-xl"
-                  style={{ backgroundColor: ACCENT_LIGHT }}
+                  style={{ backgroundColor: `${ACCENT}20` }}
                 >
                   <s.icon className="h-6 w-6" style={{ color: ACCENT }} />
                 </div>
                 <p className="mt-4 text-3xl font-extrabold sm:text-4xl" style={{ color: ACCENT }}>
                   {s.value}
                 </p>
-                <p className="mt-1 text-sm text-neutral-500">{s.label}</p>
+                <p className="mt-1 text-sm text-neutral-400">{s.label}</p>
               </div>
             ))}
           </div>
@@ -438,20 +433,20 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-white px-4 py-16 sm:px-6">
+      <section className="bg-[#111111] px-4 py-16 sm:px-6">
         <div
           ref={ctaAnim.ref}
           className={`mx-auto max-w-5xl transition-all duration-700 delay-100 ${
             ctaAnim.isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          <div className="rounded-3xl border border-neutral-200 bg-[#FFFDF8] px-6 py-16 text-center shadow-sm sm:px-12">
+          <div className="rounded-3xl border border-neutral-800 bg-[#0A0A0A] px-6 py-16 text-center sm:px-12">
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
               당신의 프로젝트를
               <br />
               <span style={{ color: ACCENT }}>세상에 선보이세요</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-500">
+            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-400">
               등록 무료, 실사용자 피드백 획득, 롱테일 트래픽까지.
               <br />
               바이브코딩 커뮤니티가 당신의 프로젝트를 응원합니다.
@@ -466,12 +461,12 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
               </Link>
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-6 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-300"
+                className="inline-flex items-center gap-2 rounded-full border border-neutral-700 px-6 py-3 text-sm font-semibold text-white transition hover:border-neutral-500"
               >
                 등록 가이드 보기
               </Link>
             </div>
-            <p className="mt-6 text-xs text-neutral-400">
+            <p className="mt-6 text-xs text-neutral-500">
               지금 1,240개의 프로젝트가 Viber에 등록되고 있어요 ✨
             </p>
           </div>
@@ -479,7 +474,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-neutral-200 bg-[#FFFDF8] px-4 py-12 sm:px-6">
+      <footer className="border-t border-neutral-800 bg-[#0A0A0A] px-4 py-12 sm:px-6">
         <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-4">
           {/* col 1: logo + desc + social */}
           <div>
@@ -492,9 +487,9 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
               만든 것을 세상에 보여주세요.
             </p>
             <div className="mt-4 flex items-center gap-3">
-              <Github className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-neutral-700" />
-              <Twitter className="h-4 w-4 cursor-pointer text-neutral-400 transition hover:text-neutral-700" />
-              <span className="cursor-pointer text-sm text-neutral-400 transition hover:text-neutral-700">💬</span>
+              <Github className="h-4 w-4 cursor-pointer text-neutral-500 transition hover:text-white" />
+              <Twitter className="h-4 w-4 cursor-pointer text-neutral-500 transition hover:text-white" />
+              <span className="cursor-pointer text-sm text-neutral-500 transition hover:text-white">💬</span>
             </div>
           </div>
 
@@ -508,7 +503,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
                 { label: "Categories", href: "/projects" },
                 { label: "Tags", href: "/projects" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
@@ -525,7 +520,7 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
                 { label: "등록 가이드", href: "/guide" },
                 { label: "FAQ", href: "/faq" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
@@ -542,16 +537,16 @@ export function VariantFeature({ data, viewer }: LandingVariantProps) {
                 { label: "Privacy", href: "/privacy" },
                 { label: "Discord", href: "#" },
               ].map((l) => (
-                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-neutral-700">
+                <Link key={l.label} href={l.href} className="text-xs text-neutral-500 transition hover:text-white">
                   {l.label}
                 </Link>
               ))}
             </div>
           </div>
         </div>
-        <div className="mx-auto mt-10 flex max-w-5xl items-center justify-between border-t border-neutral-100 pt-6">
-          <span className="text-xs text-neutral-400">&copy; 2026 Viber. All rights reserved.</span>
-          <span className="text-xs text-neutral-400">
+        <div className="mx-auto mt-10 flex max-w-5xl items-center justify-between border-t border-neutral-800 pt-6">
+          <span className="text-xs text-neutral-500">&copy; 2026 Viber. All rights reserved.</span>
+          <span className="text-xs text-neutral-500">
             Made with ❤️ by the Vibe Coding Community
           </span>
         </div>
@@ -590,7 +585,7 @@ function StarRating({ score }: { score: number }) {
           strokeWidth={1.5}
         />
       ))}
-      <span className="ml-1 text-xs font-semibold text-neutral-600">{score}</span>
+      <span className="ml-1 text-xs font-semibold text-neutral-400">{score}</span>
     </span>
   );
 }
@@ -600,7 +595,7 @@ function FeaturedCard({ project }: { project: SerializedProjectCard }) {
   return (
     <Link
       href={`/p/${project.slug}`}
-      className="block overflow-hidden rounded-2xl border border-neutral-200 bg-gradient-to-br from-[#fef3ec] via-white to-[#fff7f3] p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:p-8"
+      className="block overflow-hidden rounded-2xl border border-neutral-800 bg-gradient-to-br from-neutral-900 via-[#0A0A0A] to-neutral-900 p-6 transition hover:-translate-y-1 hover:border-neutral-600 sm:p-8"
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
@@ -646,10 +641,10 @@ function FeaturedCard({ project }: { project: SerializedProjectCard }) {
 
 function DummyFeaturedCard() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-gradient-to-br from-[#fef3ec] via-white to-[#fff7f3] p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:p-8">
+    <div className="overflow-hidden rounded-2xl border border-neutral-800 bg-gradient-to-br from-neutral-900 via-[#0A0A0A] to-neutral-900 p-6 transition hover:-translate-y-1 hover:border-neutral-600 sm:p-8">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-violet-100 text-3xl shadow-sm">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-neutral-800 text-3xl">
             {DUMMY_FEATURED.icon}
           </div>
           <div>
@@ -697,7 +692,7 @@ function ProjectCard({ project }: { project: SerializedProjectCard }) {
   return (
     <Link
       href={`/p/${project.slug}`}
-      className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg"
+      className="flex flex-col justify-between rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5 transition hover:-translate-y-1 hover:border-neutral-600"
     >
       <div>
         <div className="flex items-start justify-between">
@@ -707,11 +702,11 @@ function ProjectCard({ project }: { project: SerializedProjectCard }) {
             )}
             <h3 className="text-sm font-bold">{project.title}</h3>
           </div>
-          <button className="text-neutral-300 hover:text-neutral-500 transition">
+          <button className="text-neutral-600 hover:text-neutral-400 transition">
             <Triangle className="h-4 w-4" />
           </button>
         </div>
-        <p className="mt-3 line-clamp-2 text-xs leading-5 text-neutral-500">
+        <p className="mt-3 line-clamp-2 text-xs leading-5 text-neutral-400">
           {project.tagline}
         </p>
       </div>
@@ -737,20 +732,20 @@ function DummyCard({ title, icon, category, tagline, votes, score }: {
   score: number;
 }) {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
+    <div className="flex flex-col justify-between rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5 transition hover:-translate-y-1 hover:border-neutral-600">
       <div>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-lg">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-800 text-lg">
               {icon}
             </div>
             <h3 className="text-sm font-bold">{title}</h3>
           </div>
-          <button className="text-neutral-300 transition hover:text-neutral-500">
+          <button className="text-neutral-600 transition hover:text-neutral-400">
             <Triangle className="h-4 w-4" />
           </button>
         </div>
-        <p className="mt-3 line-clamp-2 text-xs leading-5 text-neutral-500">{tagline}</p>
+        <p className="mt-3 line-clamp-2 text-xs leading-5 text-neutral-400">{tagline}</p>
       </div>
       <div className="mt-4 flex items-center justify-between">
         <CategoryBadge category={category} />
@@ -770,12 +765,12 @@ function NewProjectRow({ project }: { project: SerializedProjectCard }) {
   return (
     <Link
       href={`/p/${project.slug}`}
-      className="flex items-center gap-4 px-5 py-4 transition hover:bg-neutral-50"
+      className="flex items-center gap-4 px-5 py-4 transition hover:bg-neutral-800/50"
     >
       {project.coverImageUrl ? (
         <img src={project.coverImageUrl} alt="" className="h-10 w-10 shrink-0 rounded-xl object-cover" />
       ) : (
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-neutral-100 text-lg">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-neutral-800 text-lg">
           📦
         </div>
       )}
@@ -808,9 +803,9 @@ function DummyNewRow({ title, icon, category, tagline, votes, rank }: {
   rank: number;
 }) {
   return (
-    <div className="flex items-center gap-4 px-5 py-4 transition hover:bg-neutral-50">
-      <span className="w-6 text-center text-sm font-bold text-neutral-300">{rank}</span>
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-neutral-100 text-lg">
+    <div className="flex items-center gap-4 px-5 py-4 transition hover:bg-neutral-800/50">
+      <span className="w-6 text-center text-sm font-bold text-neutral-600">{rank}</span>
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-neutral-800 text-lg">
         {icon}
       </div>
       <div className="min-w-0 flex-1">
@@ -836,16 +831,16 @@ function DummyNewRow({ title, icon, category, tagline, votes, rank }: {
 /* ── Feedback cards ── */
 function FeedbackCard({ project }: { project: SerializedProjectCard }) {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
+    <div className="flex flex-col justify-between rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5 transition hover:-translate-y-1 hover:border-neutral-600">
       <div>
         <div className="flex items-center gap-2">
           <p className="text-sm font-bold">{project.title}</p>
           <CategoryBadge category={project.category} />
-          <span className="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-600">
+          <span className="rounded-full bg-green-900/30 px-2 py-0.5 text-[10px] font-semibold text-green-400">
             🟢 피드백 요청
           </span>
         </div>
-        <p className="mt-2 text-xs text-neutral-500">{project.tagline}</p>
+        <p className="mt-2 text-xs text-neutral-400">{project.tagline}</p>
       </div>
       <div className="mt-4 flex gap-2">
         <Link
@@ -859,7 +854,7 @@ function FeedbackCard({ project }: { project: SerializedProjectCard }) {
           projectId={project.id}
           source="home_try"
           href={project.liveUrl}
-          className="rounded-full border border-neutral-200 px-4 py-2 text-xs font-semibold text-neutral-700 transition hover:border-neutral-300"
+          className="rounded-full border border-neutral-700 px-4 py-2 text-xs font-semibold text-neutral-300 transition hover:border-neutral-500"
         >
           Try
         </OutboundLink>
@@ -876,21 +871,21 @@ function DummyFeedbackCard({ title, icon, category, tagline, feedback }: {
   feedback: string;
 }) {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
+    <div className="flex flex-col justify-between rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5 transition hover:-translate-y-1 hover:border-neutral-600">
       <div>
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-100 text-base">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-800 text-base">
             {icon}
           </div>
           <p className="text-sm font-bold">{title}</p>
           <CategoryBadge category={category} />
-          <span className="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-600">
+          <span className="rounded-full bg-green-900/30 px-2 py-0.5 text-[10px] font-semibold text-green-400">
             🟢 피드백 요청
           </span>
         </div>
-        <p className="mt-2 text-xs text-neutral-500">{tagline}</p>
+        <p className="mt-2 text-xs text-neutral-400">{tagline}</p>
         {feedback && (
-          <p className="mt-2 text-xs italic text-neutral-400">&ldquo;{feedback}&rdquo;</p>
+          <p className="mt-2 text-xs italic text-neutral-500">&ldquo;{feedback}&rdquo;</p>
         )}
       </div>
       <div className="mt-4 flex gap-2">
@@ -900,7 +895,7 @@ function DummyFeedbackCard({ title, icon, category, tagline, feedback }: {
         >
           Give Feedback 💬
         </button>
-        <button className="rounded-full border border-neutral-200 px-4 py-2 text-xs font-semibold text-neutral-700 transition hover:border-neutral-300">
+        <button className="rounded-full border border-neutral-700 px-4 py-2 text-xs font-semibold text-neutral-300 transition hover:border-neutral-500">
           Try
         </button>
       </div>

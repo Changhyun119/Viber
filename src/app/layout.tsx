@@ -27,14 +27,8 @@ export default async function RootLayout({
   const viewer = await getCurrentProfile();
 
   return (
-    <html lang="ko" data-theme="dark" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t)}})()`,
-          }}
-        />
-      </head>
+    <html lang="ko" data-theme="dark">
+      <head />
       <body className="min-h-screen text-foreground antialiased">
         <ThemeProvider>
           <div className="min-h-screen">
@@ -45,10 +39,9 @@ export default async function RootLayout({
         </ThemeProvider>
         {/* 랜딩 페이지에서 공통 헤더/푸터 숨기기 */}
         <style dangerouslySetInnerHTML={{ __html: `
-          .landing-fullpage ~ * { display: none; }
           .landing-fullpage { margin-top: -56px; }
-          body:has(.landing-fullpage) > div > div > header,
-          body:has(.landing-fullpage) > div > div > footer { display: none !important; }
+          body:has(.landing-fullpage) header:not(.landing-fullpage header),
+          body:has(.landing-fullpage) footer:not(.landing-fullpage footer) { display: none !important; }
           body:has(.landing-fullpage) { background: none !important; }
         ` }} />
       </body>

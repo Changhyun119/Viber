@@ -5,7 +5,7 @@ import { ArrowRight, MessageSquareText, BookMarked, Sparkles, Search, Home, Pack
 import { HeroBackground } from "@/components/ui/hero-background";
 import { RotatingText } from "../rotating-text";
 import { GeoFaqSection } from "../geo-faq-section";
-import { ThemeToggle } from "@/components/theme-toggle";
+
 import type { LandingVariantProps, SerializedProjectCard } from "../types";
 import {
   TryButton,
@@ -53,7 +53,6 @@ export function VariantClassic({ data, viewer }: LandingVariantProps) {
           </nav>
           <div className="flex-1" />
           <div className="flex shrink-0 items-center gap-2">
-            <ThemeToggle />
             {viewer ? (
               <span className="hidden rounded-full bg-[rgba(47,106,97,0.1)] px-3.5 py-2 text-sm font-semibold text-green sm:inline-flex">{viewer.displayName}</span>
             ) : (

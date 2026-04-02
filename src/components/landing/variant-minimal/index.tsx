@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -80,6 +80,10 @@ const V3_NAV = [
   { page: "feedback" as const, label: "피드백" },
 ];
 
+/* ── rotating words (타이핑 애니메이션) ── */
+const ROTATING_WORDS = ["API", "앱", "SaaS", "게임", "도구", "AI", "웹사이트", "플러그인"];
+const ACCENT = "#d76542";
+
 /* ── dummy data (DB가 비어 있을 때 사용) ── */
 const DUMMY_PROJECTS: {
   rank: number;
@@ -142,6 +146,50 @@ export function VariantMinimal({ data, viewer }: LandingVariantProps) {
   const { subPage, navigate } = useVariantNav();
   const hasProjects = data.featured.length > 0;
 
+  /* ── typing animation state ── */
+  const [rotateIdx, setRotateIdx] = useState(0);
+  const [displayText, setDisplayText] = useState(ROTATING_WORDS[0]);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [charIdx, setCharIdx] = useState(ROTATING_WORDS[0].length);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) {
+      const pauseTimer = setTimeout(() => {
+        setIsPaused(false);
+        setIsDeleting(true);
+      }, 1800);
+      return () => clearTimeout(pauseTimer);
+    }
+
+    const word = ROTATING_WORDS[rotateIdx % ROTATING_WORDS.length];
+    const speed = isDeleting ? 60 : 120;
+
+    const timer = setTimeout(() => {
+      if (!isDeleting) {
+        if (charIdx < word.length) {
+          setDisplayText(word.slice(0, charIdx + 1));
+          setCharIdx(charIdx + 1);
+        } else {
+          setIsPaused(true);
+        }
+      } else {
+        if (charIdx > 0) {
+          setDisplayText(word.slice(0, charIdx - 1));
+          setCharIdx(charIdx - 1);
+        } else {
+          setIsDeleting(false);
+          const nextIdx = (rotateIdx + 1) % ROTATING_WORDS.length;
+          setRotateIdx(nextIdx);
+          setDisplayText("");
+          setCharIdx(0);
+        }
+      }
+    }, speed);
+
+    return () => clearTimeout(timer);
+  }, [charIdx, isDeleting, rotateIdx, isPaused]);
+
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* V3 헤더 — 미니멀 */}
@@ -163,7 +211,6 @@ export function VariantMinimal({ data, viewer }: LandingVariantProps) {
               </button>
             ))}
           </nav>
-          <Moon className="h-4 w-4 cursor-pointer text-neutral-500 hover:text-white" />
         </div>
       </header>
 
@@ -174,8 +221,23 @@ export function VariantMinimal({ data, viewer }: LandingVariantProps) {
             Viber
           </h1>
         </AnimateIn>
-        <AnimateIn delay={100}>
-          <p className="mt-6 max-w-sm text-sm leading-6 text-neutral-400 sm:text-base">
+        <AnimateIn delay={80}>
+          <p className="mt-6 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
+            내가 만든{" "}
+            <span style={{ color: ACCENT }}>
+              {displayText}
+              <span className="animate-blink">|</span>
+            </span>
+            <br />
+            여기서 시작
+          </p>
+          <style dangerouslySetInnerHTML={{ __html: `
+            @keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+            .animate-blink { animation: blink 1s step-end infinite; font-weight: 300; }
+          ` }} />
+        </AnimateIn>
+        <AnimateIn delay={150}>
+          <p className="mt-4 max-w-sm text-sm leading-6 text-neutral-400 sm:text-base">
             인디 메이커의 프로덕트를 발견하고,
             <br />
             피드백을 주고받는 공간.
@@ -337,9 +399,9 @@ export function VariantMinimal({ data, viewer }: LandingVariantProps) {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-neutral-800 bg-[#0A0A0A] px-6 py-8">
+      <footer className="border-t border-neutral-800 bg-[#111111] px-6 py-8">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <span className="text-xs text-neutral-600">&copy; 2026 Viber</span>
+          <span className="text-xs text-neutral-400">&copy; 2026 Viber</span>
           <div className="flex gap-6">
             <Link
               href="/about"

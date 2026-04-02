@@ -3,7 +3,7 @@ import { Compass, Flame, FolderKanban, Home, MessageSquareText, Package, PlusCir
 import type { ReactNode } from "react";
 
 import type { SessionProfile } from "@/lib/auth/session";
-import { ThemeToggle } from "@/components/theme-toggle";
+
 
 type SiteHeaderProps = {
   viewer: SessionProfile | null;
@@ -83,7 +83,7 @@ export function SiteHeader({ viewer }: SiteHeaderProps) {
 
         {/* 우측 액션 */}
         <div className="flex shrink-0 items-center gap-2">
-          <ThemeToggle />
+
           {viewer ? (
             <>
               <Link href="/me/saved" className="hidden whitespace-nowrap rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold transition hover:bg-surface-muted sm:inline-flex">
